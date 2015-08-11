@@ -1,0 +1,154 @@
+alias bls='/bin/ls -Fh'
+alias gls='/usr/local/opt/coreutils/libexec/gnubin/ls'
+alias ls='gls --color -Fh --group-directories-first'
+alias ll='ls -la'
+alias l.='ls -d .*'
+
+alias cd..='cd ..'    # always missing that space!
+alias .~='cd ~'       # home toto
+alias ..='cd ..'
+alias ...='cd ../../../'
+
+alias c='clear'
+alias h='history'
+alias hg='history | grep'
+
+alias to-bladnman='ssh bladnman@bladnman.com'
+alias to-dexter='ssh dexter\ maher@DexterCraft.local'
+
+alias start_apache='sudo apachectl start'
+alias stop_apache='sudo apachectl stop'
+alias restart_apache='sudo apachectl restart'
+
+alias chromeNoSecurity='open -a Google\ Chrome --args --disable-web-security'
+
+alias qpNewPatch='node /Users/mmaher/Dropbox/Projects/QP_Central/PatchCreator/createPatch.js'
+alias createPatch='node /Users/mmaher/Dropbox/Projects/QP_Central/PatchCreator/createPatch.js'
+alias qpPublish='node /Users/mmaher/Dropbox/Projects/QP_Central/Utils/QPDistributer/publishQubedPeasSystem.js'
+
+alias ipAddress='ipconfig getifaddr en0'
+alias bi="brew install"
+
+# Be polite
+echo "\n\n   I'm anxious to help!\n\n"
+
+
+alias emberNew='. /Users/mmaher/Dropbox/Projects/scripts/ember/playground/makeEmberPlayground.sh'
+
+FIRE_IP='192.168.1.32'
+alias adbConnect='adb connect $FIRE_IP'
+alias adbStopDestro='adbConnect; adb shell am force-stop com.snei.vue.android.firetv'
+alias adbStartDestroDirect='adbConnect; adb shell am start -a android.intent.action.MAIN -n com.snei.vue.android.firetv/.ui.PSVue'
+alias adbStartDestro='firestickStartWithUrl /#/profiles'
+
+firestickStart() {
+    adbConnect;
+
+    adbStopDestro;
+    /usr/bin/open -a "/Applications/Google Chrome.app/" 'http://$FIRE_IP:9222/';
+
+    adbStartDestro;
+}
+firestickStartWithUrl() {
+    adbConnect;
+
+    adbStopDestro;
+    /usr/bin/open -a "/Applications/Google Chrome.app/" 'http://$FIRE_IP:9222/';
+
+    IPWIFI=`ipWIFI`;
+    adb shell am start --user 0  -e url http://$IPWIFI:4200/$1?useFixtures=false -n com.snei.vue.android.firetv/.ui.dev.UrlLaunchActivity;
+}
+
+alias ipWIFI='ipconfig getifaddr en0'
+alias ipWired='ipconfig getifaddr en3'
+
+sayIP() {
+    IPWIFI=`ipWIFI`;
+    echo $IPWIFI;
+}
+
+
+
+#--------------------------
+# File & folder management:
+#--------------------------
+# various 'ls' shortcuts
+#ll ()  { /bin/ls -aOl "$@" | /usr/bin/more ; }
+#lll () { /bin/ls -aOle "$@" | /usr/bin/more ; }
+#lt ()  { /bin/ls -lt "$@" | /usr/bin/more ; }
+#lsr () { /bin/ls -l "$@"/..namedfork/rsrc ; }
+alias lsa='ls -lart'
+#-------
+
+#--------------------------
+# Alias work found at:
+# http://hayne.net/MacDev/Bash/aliases.bash
+#--------------------------
+# The following aliases (save & show) are for saving frequently used directories
+# You can save a directory using an abbreviation of your choosing. Eg. save ms
+# You can subsequently move to one of the saved directories by using cd with
+# the abbreviation you chose. Eg. cd ms  (Note that no '$' is necessary.)
+# (I got this technique from Michael Boyle in the late 1980's at Visual Edge)
+alias sdirs='source ~/.dirs'
+alias show='cat ~/.dirs'
+save () { /usr/bin/sed "/$@/d" ~/.dirs > ~/.dirs1; \mv ~/.dirs1 ~/.dirs; echo "$@"=\"`pwd`\" >> ~/.dirs; source ~/.dirs ; }
+# Initialization for the above 'save' facility: source the .sdirs file:
+sdirs
+# set the bash option so that no '$' is required when using the above facility
+shopt -s cdable_vars
+#-------
+
+#--------------------------
+# cdf: cd's to frontmost window of Finder
+cdf ()
+{
+    currFolderPath=$( /usr/bin/osascript <<"    EOT"
+        tell application "Finder"
+            try
+                set currFolder to (folder of the front window as alias)
+            on error
+                set currFolder to (path to desktop folder as alias)
+            end try
+            POSIX path of currFolder
+        end tell
+    EOT
+    )
+    echo "Changing Directory to Foremost Finder Window: \"$currFolderPath\""
+    cd "$currFolderPath"
+}
+
+#-----------
+# Searching:
+#-----------
+# ff:  to find a file under the current directory
+ff () { /usr/bin/find . -name "$@" ; }
+# ffs: to find a file whose name starts with a given string
+ffs () { /usr/bin/find . -name "$@"'*' ; }
+# ffe: to find a file whose name ends with a given string
+ffe () { /usr/bin/find . -name '*'"$@" ; }
+# grepfind: to grep through files found by find, e.g. grepf pattern '*.c'
+# note that 'grep -r pattern dir_name' is an alternative if want all files
+grepfind () { find . -type f -name "$2" -print0 | xargs -0 grep "$1" ; }
+# I often can't recall what I named this alias, so make it work either way:
+alias findgrep='grepfind'
+
+
+
+# # # #
+# Personal Aliases
+openInWebstorm () {
+    open -a /Applications/WebStorm.app $1
+}
+alias webstorm='openInWebstorm';
+alias ws='webstorm';
+alias sub='sublime';
+
+
+# set title of window (iterm2)
+function title {
+    echo -ne "\033]0;"$*"\007"
+}
+
+alias es='ember server --live'; # live data
+alias esf='ember server'; # fixtures
+alias esn='ember s --live-reload=false';

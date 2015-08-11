@@ -1,0 +1,8 @@
+
+CUR_DIR=`dirname $BASH_SOURCE`
+
+# SHELL PROMPT - GIT style
+. $CUR_DIR/bash_git_prompt
+
+# ALIASES
+. $CUR_DIR/aliases
