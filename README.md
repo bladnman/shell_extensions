@@ -15,7 +15,7 @@ Then you need to tell your command system to execute this subsystem. Basically y
 # is where you cloned to
 
 if [ -f ~/shell_extensions/install ]; then
-   . ~/shell_extensions/install
+   . ~/shell_extensions/install.sh
 fi
 ```
 
