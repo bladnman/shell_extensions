@@ -11,6 +11,9 @@ alias destroTypeText='destroConnect; _adbTypeText'
 alias destroSetIP='_destroSetIP'
 alias destroLog='pidcat'
 
+# LOCATION SETTERS
+alias destroSetToOfficeStick='destroSetIP $DESTRO_OFFICE_FIRE_STICK_IP; destroConnect'
+alias destroSetToHomeDiningRoomStick='destroSetIP $DESTRO_HOME_DINING_FIRE_STICK_IP; destroConnect'
 
 # D E S T R O
 SNEI_DESTRO_PKG='com.snei.vue.firetv'
@@ -18,6 +21,7 @@ SNEI_DESTRO_DEBUG_PKG='com.snei.vue.firetv.debug'
 SNEI_DESTRO_STAGE_PKG='com.snei.vue.firetv.stage'
 
 _destroSetIP() {
+  echo 'Setting IP: ' $1
   DESTRO_FIRE_IP=$1
 }
 _destroStartWithUrl() {
