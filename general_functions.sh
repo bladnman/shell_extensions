@@ -40,3 +40,6 @@ ffe () { /usr/bin/find . -name '*'"$@" ; }
 grepfind () { find . -type f -name "$2" -print0 | xargs -0 grep "$1" ; }
 # I often can't recall what I named this alias, so make it work either way:
 alias findgrep='grepfind'
+
+# do not add items to history that start with an extra space
+HISTCONTROL=ignorespace
