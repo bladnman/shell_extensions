@@ -11,6 +11,7 @@ CUR_DIR=`dirname $BASH_SOURCE`
 . $CUR_DIR/aliases_files_folders.sh
 . $CUR_DIR/aliases_qubedpeas.sh
 . $CUR_DIR/aliases_ember.sh
+. $CUR_DIR/aliases_node.sh
 
 # Be polite
 echo "\n\n   I'm anxious to help!\n\n"

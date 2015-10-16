@@ -17,8 +17,10 @@ alias destroScreenShot='adb shell screencap -p | perl -pe "s/\x0D\x0A/\x0A/g" > 
 alias destroUninstall='adb uninstall com.snei.vue.firetv.debug'
 alias destroInstall='adb install '
 alias destroWebTools='_destroOpenWebTools'
-alias destroTypeLocalServerUrlHome='destroTypeText http://192.168.1.7:4200/profiles'
-
+# alias destroTypeLocalServerUrlHome='destroTypeText http://:4200/profiles'
+alias destroTypeLocalHost='_destroTypeLocalHost'
+alias destroTop='adb shell -m 5'
+alias destroWebLog='adb logcat | grep CONSOLE'
 
 # short aliases
 alias ds='destroStart'
@@ -40,6 +42,10 @@ _destroSetIP() {
 }
 _destroOpenWebTools() {
   /usr/bin/open -a "/Applications/Google Chrome.app/" 'http://'$DESTRO_FIRE_IP':9222/';
+}
+_destroTypeLocalHost() {
+  IPWIFI=`ipWIFI`;
+  destroTypeText http://$IPWIFI:4200/profiles;
 }
 _destroStartWithUrl() {
   destroConnect;
