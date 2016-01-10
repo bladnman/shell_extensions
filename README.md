@@ -35,3 +35,18 @@ A very clean shell prompt that will show you GIT status indicators and repo name
 
 ###Standard Aliases
 Some of the standard alias settings used for a shell
+
+###GNU Utils
+Note that there is an `ls` alias in this collection that will cripple your ability to list files. To fix this:
+
+####Install homebrew
+```
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+####Install GNU utilities
+```
+brew install coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt
+```
+
+
