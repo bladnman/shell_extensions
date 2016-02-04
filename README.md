@@ -2,12 +2,28 @@
 A `.profile` can get out of hand, this little environment is here to help that situation. From one command file you can pick and choose what kind of shell you want
 
 ##Install
-First, you need to clone this GIT repo locally.
+
+
+###GNU Utils
+Note that there is an `ls` alias in this collection that will cripple your ability to list files. To fix this:
+
+####Using homebrew
+```
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+####Install GNU utilities
+```
+brew install coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt
+```
+
+###Clone repo
 
 ```
 > git clone ...
 ```
 
+###Install `.profile` hook
 Then you need to tell your command system to execute this subsystem. Basically you need to tell your `.profile` to run this stuff. The issue here is that many people run their profiles differently. I use a `.bashrc` to run most things so that jobs have the same tools I have mostly. So these instructions assume that:
 
 ```
@@ -35,18 +51,3 @@ A very clean shell prompt that will show you GIT status indicators and repo name
 
 ###Standard Aliases
 Some of the standard alias settings used for a shell
-
-###GNU Utils
-Note that there is an `ls` alias in this collection that will cripple your ability to list files. To fix this:
-
-####Install homebrew
-```
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-```
-
-####Install GNU utilities
-```
-brew install coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt
-```
-
-
