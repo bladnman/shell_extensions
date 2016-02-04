@@ -8,6 +8,11 @@
 # You can subsequently move to one of the saved directories by using cd with
 # the abbreviation you chose. Eg. cd ms  (Note that no '$' is necessary.)
 # (I got this technique from Michael Boyle in the late 1980's at Visual Edge)
+
+if [ ! -f ~/.dirs ]; then
+	touch ~/.dirs
+fi
+
 alias sdirs='source ~/.dirs'
 alias show='cat ~/.dirs'
 save () { /usr/bin/sed "/$@/d" ~/.dirs > ~/.dirs1; \mv ~/.dirs1 ~/.dirs; echo "$@"=\"`pwd`\" >> ~/.dirs; source ~/.dirs ; }
