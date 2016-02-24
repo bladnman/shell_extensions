@@ -21,10 +21,16 @@ alias stop_apache='sudo apachectl stop'
 alias restart_apache='sudo apachectl restart'
 alias chromeNoSecurity='open -a Google\ Chrome --args --disable-web-security'
 
+
+alias dash='openInDash'
+
 # # # #
 # Personal Aliases
 openInWebstorm () {
     open -a /Applications/WebStorm.app $1
+}
+openInDash() {
+  open dash://$1
 }
 alias webstorm='openInWebstorm';
 alias ws='webstorm';
