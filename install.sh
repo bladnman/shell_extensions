@@ -15,8 +15,7 @@ CUR_DIR=`dirname $BASH_SOURCE`
 . $CUR_DIR/aliases_qubedpeas.sh
 . $CUR_DIR/aliases_ember.sh
 . $CUR_DIR/aliases_node.sh
-
-. $CUR_DIR/vue_services_development_profile.sh
+. $CUR_DIR/aliases_vue_services.sh
 
 # Be polite
 echo "Hello sir. Let's have some fun!"
