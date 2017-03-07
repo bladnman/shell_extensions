@@ -16,9 +16,13 @@ openInWebstorm () {
 openInDash() {
   open dash://$1
 }
+openInVisualStudioCode () {
+    open -a /Applications/Visual\ Studio\ Code.app $1
+}
 alias webstorm='openInWebstorm';
 alias ws='webstorm';
 alias sub='sublime';
+alias vsc='openInVisualStudioCode';
 
 # set title of window (iterm2)
 function title {

@@ -1,5 +1,5 @@
 # E X P O R T S
-export BARONESS_PATH='/Users/mmaher/Documents/sony/code/baroness'
+export BARONESS_PATH='/Users/mmaher/Documents/sony/code/baroness-vs-dev'
 export VUE_SERVICES_PATH='/Users/mmaher/Documents/sony/code/vue-services'
 export VUE_EMBER_SERVICES_PATH='/Users/mmaher/Documents/sony/code/vue-ember-services'
 

@@ -1,0 +1,2 @@
+# enviroment values
+EDITOR=sublime

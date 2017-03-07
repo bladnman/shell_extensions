@@ -1,6 +1,8 @@
 
 CUR_DIR=`dirname $BASH_SOURCE`
 
+. $CUR_DIR/environment.sh
+
 # SHELL PROMPT - GIT style
 . $CUR_DIR/git-complete.sh
 . $CUR_DIR/git-flow-completion.sh
