@@ -3,8 +3,8 @@ export BARONESS_PATH='/Users/mmaher/Documents/sony/code/baroness-vs-dev'
 export VUE_SERVICES_PATH='/Users/mmaher/Documents/sony/code/vue-services'
 export VUE_EMBER_SERVICES_PATH='/Users/mmaher/Documents/sony/code/vue-ember-services'
 
-export VUE_SERVICES_PKG_NAME='snei-vue-services'
-export VUE_EMBER_SERVICES_PKG_NAME='snei-vue-ember-services'
+export VUE_SERVICES_PKG_NAME='@sie/vue-services'
+export VUE_EMBER_SERVICES_PKG_NAME='@sie/vue-ember-services'
 
 alias vsDevStart='vs_setup_for_dev $BARONESS_PATH'
 alias vsDevStop='vs_destroy_for_dev $BARONESS_PATH'
