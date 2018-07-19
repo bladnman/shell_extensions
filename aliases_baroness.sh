@@ -7,5 +7,5 @@ alias fixed-no='cd bar;npm run start-fixture-noreload'
 alias liveno='cd bar;npm run start-live-noreload'
 alias fixedno='cd bar;npm run start-fixture-noreload'
 
-alias blive-no='live'
+alias blives='live'
 alias bliveno='liveno'
