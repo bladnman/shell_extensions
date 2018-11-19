@@ -23,6 +23,7 @@ alias webstorm='openInWebstorm';
 alias ws='webstorm';
 alias sub='sublime';
 alias vsc='openInVisualStudioCode';
+alias code='openInVisualStudioCode';
 
 # set title of window (iterm2)
 function title {
