@@ -24,6 +24,7 @@ alias ws='webstorm';
 alias sub='sublime';
 alias vsc='openInVisualStudioCode';
 alias code='openInVisualStudioCode';
+alias create-react-app='npx create-react-app';
 
 # set title of window (iterm2)
 function title {
