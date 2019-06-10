@@ -27,6 +27,6 @@ alias code='openInVisualStudioCode';
 alias cra='npx create-react-app';
 
 # set title of window (iterm2)
-function title {
-    echo -ne "\033]0;"$*"\007"
-}
+# function title {
+#     echo -ne "\033]0;"$*"\007"
+# }

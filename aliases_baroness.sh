@@ -13,3 +13,10 @@ alias fixedno='cdbar;npm run start-fixture-noreload'
 
 alias blive='live'
 alias bliveno='liveno'
+
+# baroness
+alias stbar='live'
+alias stbarno='liveno'
+
+# react
+alias str='cdrn;npm run start-web'

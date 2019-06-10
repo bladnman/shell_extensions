@@ -1,25 +1,31 @@
 
-CUR_DIR=`dirname $BASH_SOURCE`
+# zsh
+CUR_DIR=`dirname ${(%):-%x}`
 
-. $CUR_DIR/environment.sh
+#bash
+# CUR_DIR=`dirname $BASH_SOURCE`
+
+
+# . $CUR_DIR/environment.sh
 
 # SHELL PROMPT - GIT style
-. $CUR_DIR/git-complete.sh
-. $CUR_DIR/git-flow-completion.sh
-. $CUR_DIR/bash_git_prompt.sh
-. $CUR_DIR/general_functions.sh
+# . $CUR_DIR/git-complete.sh
+# . $CUR_DIR/git-flow-completion.sh
+# . $CUR_DIR/bash_git_prompt.sh
+# . $CUR_DIR/general_functions.sh
 
 # ALIASES
 . $CUR_DIR/aliases.sh
-. $CUR_DIR/aliases_destro.sh
+# . $CUR_DIR/aliases_destro.sh
 . $CUR_DIR/aliases_baroness.sh
-. $CUR_DIR/aliases_files_folders.sh
-. $CUR_DIR/aliases_qubedpeas.sh
-. $CUR_DIR/aliases_ember.sh
-. $CUR_DIR/aliases_node.sh
+. $CUR_DIR/aliases_home.sh
+# . $CUR_DIR/aliases_files_folders.sh
+# . $CUR_DIR/aliases_qubedpeas.sh
+# . $CUR_DIR/aliases_ember.sh
+# . $CUR_DIR/aliases_node.sh
 . $CUR_DIR/aliases_shell.sh
-. $CUR_DIR/aliases_vue_services.sh
-. $CUR_DIR/aliases_git.sh
+# . $CUR_DIR/aliases_vue_services.sh
+# . $CUR_DIR/aliases_git.sh
 
 # Be polite
 echo "Hello sir. Let's have some fun!"
