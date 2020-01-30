@@ -4,6 +4,7 @@ CUR_DIR=`dirname ${(%):-%x}`
 
 #bash
 # CUR_DIR=`dirname $BASH_SOURCE`
+. $CUR_DIR/colors.sh
 
 
 # . $CUR_DIR/environment.sh
@@ -28,4 +29,4 @@ CUR_DIR=`dirname ${(%):-%x}`
 # . $CUR_DIR/aliases_git.sh
 
 # Be polite
-echo "Hello sir. Let's have some fun!"
+. $CUR_DIR/hello.sh
