@@ -4,18 +4,16 @@ _hello_penguin() {
   echo "V_/_ "
 }
 _hello_fish() {
-  echo "      o   _/,_"
-  echo "      . /o...\\__//"
-  echo "        \\_'__/\`\`\\\`"
-  echo "          \\\`"
+  echo "    o  _/,_"
+  echo "    . /o...\\__//"
+  echo "      \\_'__/\`\`\\\`"
+  echo "        \\\`"
 }
 
 
-
 echo
-echo
-echo "${SH_COLOR_GREEN}Hello sir${SH_COLOR_NC}. Let's have some fun!"
-echo "${SH_COLOR_YELLOW}"
+echo "${SH_COLOR_GREEN}   Hello sir"
+echo "${SH_COLOR_GREEN}  Let's play!${SH_COLOR_YELLOW}"
 _hello_fish
 echo "${SH_COLOR_NC}"
 

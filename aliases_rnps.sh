@@ -4,8 +4,9 @@ SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
 
 alias pcli='prospero-cli $CONSOLE_IP '
 alias pcon='pcli get console | sed "/^$/d"'
-alias pman='pcli set manifest-url mhttp://us38f9d32262b1.am.sony.com:8080/u/mmaher/gh_helloworld '
+alias pman='pcli set manifest-url mhttp://us38f9d32262b1.am.sony.com:8080/u/mmaher/gh '
 alias p_create_sample='_p_create_sample'
+alias gh='cd ~/code/p/rnps-game-hub/packages/game-hub'
 
 _p_create_sample() {
   APP_NAME=$1
