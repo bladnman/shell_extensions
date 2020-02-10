@@ -1,10 +1,12 @@
+export USERNAME=whoami
+
 alias to-bladnman='ssh bladnman@bladnman.com'
 alias to-dexter='ssh dexter\ maher@DexterCraft.local'
 alias start_apache='sudo apachectl start'
 alias stop_apache='sudo apachectl stop'
 alias restart_apache='sudo apachectl restart'
 alias chromeNoSecurity='open -a Google\ Chrome --args --disable-web-security'
-
+alias psme='ps -u $USERNAME'
 
 alias dash='openInDash'
 

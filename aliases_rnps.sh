@@ -1,13 +1,31 @@
 CONSOLE_IP='172.31.1.2'
+MACHINE_NAME='us38f9d32262b1'
 SAMPLE_FOLDER=~/code/p/z_testapps
 SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
+MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
+GAMEHUB_FOLDER=~/code/p/rnps-game-hub/packages/game-hub
+SHELL_EXT_FOLDER='/Users/mmaher/shell_extensions'
 
-alias pcli='prospero-cli $CONSOLE_IP '
-alias pcon='pcli get console | sed "/^$/d"'
-alias pman='pcli set manifest-url mhttp://us38f9d32262b1.am.sony.com:8080/u/mmaher/gh '
+alias gh='cd $GAMEHUB_FOLDER'
+alias p_cli='prospero-cli $CONSOLE_IP '
+alias p_con='p_cli get console | sed "/^$/d"'
+alias p_man='p_cli set manifest-url mhttp://$MACHINE_NAME.am.sony.com:8080/u/mmaher/gh '
 alias p_create_sample='_p_create_sample'
-alias gh='cd ~/code/p/rnps-game-hub/packages/game-hub'
+alias p_serve_manifest='_p_serve_manifest'
+alias p_serve_gamehub='_p_serve_gamehub'
+alias p_serve='_p_serve'
 
+_p_serve() {
+  bash $SHELL_EXT_FOLDER/p_serve.sh
+}
+_p_serve_manifest() {
+  cd $MANIFEST_FOLDER
+  yarn start
+}
+_p_serve_gamehub() {
+  cd $GAMEHUB_FOLDER
+  yarn start
+}
 _p_create_sample() {
   APP_NAME=$1
   FINAL_APP_DIRECTORY="$SAMPLE_FOLDER/$APP_NAME"
