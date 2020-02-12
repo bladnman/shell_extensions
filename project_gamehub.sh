@@ -30,20 +30,34 @@ alias gh_serve='bash $SCRIPT_FULL_PATH_GH -serve'
 alias gh_link_concept='_link_concept_gamehub'
 alias gh_link_product='_link_product_gamehub'
 alias gh_link_title='_link_title_gamehub'
-
+alias gh_link='_link_any_gamehub'
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS
 # -=-=-=-=-=-=-=-=-=-=-=-=
 _link_concept_gamehub() {
-  p_cli execute shellui "openuri psgamehub:main?conceptId={$1}"
+  echo p_cli execute shellui "openuri psgamehub:main?conceptId=$@"
+  p_cli execute shellui "openuri psgamehub:main?conceptId=$@"
 }
 _link_product_gamehub() {
-  p_cli execute shellui "openuri psgamehub:main?productId={$1}"
+  echo p_cli execute shellui "openuri psgamehub:main?productId=$@"
+  p_cli execute shellui "openuri psgamehub:main?productId=$@"
 }
 _link_title_gamehub() {
-  p_cli execute shellui "openuri psgamehub:main?titleId={$1}"
+  echo p_cli execute shellui "openuri psgamehub:main?titleId=$@"
+  p_cli execute shellui "openuri psgamehub:main?titleId=$@"
 }
+_link_any_gamehub() {
+  ID=$1
+  if [[ $1 =~ [\-] ]]; then
+    _link_product_gamehub $1
+  elif [[ $1 =~ [a-zA-Z] ]] ; then
+    _link_title_gamehub $1
+  else 
+    _link_concept_gamehub $1
+  fi
+}
+
 _serve_manifest_gamehub() {
   cd $MANIFEST_FOLDER_GH
   yarn start &
