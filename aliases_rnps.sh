@@ -3,41 +3,19 @@ MACHINE_NAME='us38f9d32262b1'
 SAMPLE_FOLDER=~/code/p/z_testapps
 SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
 MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
-GAMEHUB_FOLDER=~/code/p/rnps-game-hub/packages/game-hub
 
 
-alias gh='cd $GAMEHUB_FOLDER'
-alias cdgh='cd $GAMEHUB_FOLDER'
 alias p_cli='prospero-cli $CONSOLE_IP '
 alias p_con='p_cli get console | sed "/^$/d"'
-alias p_man='p_cli set manifest-url mhttp://${CONSOLE_IP}.am.sony.com:8080/u/mmaher/gh '
 alias p_man='_p_manifest_named gh'
 alias p_man_named='_p_manifest_named'
 alias p_create_sample='_p_create_sample'
-alias p_serve_manifest='_p_serve_manifest'
-alias p_serve_gamehub='_p_serve_gamehub'
+alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
 alias p_die='p_cli kill SceShellUI'
 alias p_kill_shell='p_cli kill SceShellUI'
-alias p_link_concept='_p_link_concept'
-alias p_serve='bash $SHELL_EXT_FOLDER/scripts/serves/p_serve.sh'
 
 _p_manifest_named() {
-  # COMMAND=""
-  # echo $COMMAND
-  # bash $COMMAND 
   p_cli set manifest-url mhttp://$CONSOLE_IP.am.sony.com:8080/u/mmaher/$1
-}
-_p_link_concept() {
-  ID=$1
-  p_cli execute shellui "openuri psgamehub:main?conceptId=$ID"
-}
-_p_serve_manifest() {
-  cd $MANIFEST_FOLDER
-  yarn start
-}
-_p_serve_gamehub() {
-  cd $GAMEHUB_FOLDER
-  yarn start
 }
 _p_create_sample() {
   APP_NAME=$1
