@@ -1,3 +1,5 @@
+SHELL_EXT_FOLDER='/Users/mmaher/shell_extensions'
+export SHELL_EXT_FOLDER
 
 # zsh
 CUR_DIR=`dirname ${(%):-%x}`
@@ -27,6 +29,9 @@ CUR_DIR=`dirname ${(%):-%x}`
 . $CUR_DIR/aliases_shell.sh
 # . $CUR_DIR/aliases_vue_services.sh
 # . $CUR_DIR/aliases_git.sh
+. $CUR_DIR/aliases_portfolio.sh
+. $CUR_DIR/aliases_code.sh
+. $CUR_DIR/aliases_democrotizer.sh
 
 # Be polite
 . $CUR_DIR/hello.sh

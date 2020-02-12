@@ -1,0 +1,1 @@
+alias cddemocrotizer='cd ~/code/flutter_dev/democrotizer'
