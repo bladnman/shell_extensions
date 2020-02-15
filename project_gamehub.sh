@@ -31,6 +31,9 @@ alias gh_link_concept='_link_concept_gamehub'
 alias gh_link_product='_link_product_gamehub'
 alias gh_link_title='_link_title_gamehub'
 alias gh_link='_link_any_gamehub'
+# short-short-handers
+alias ghs='gh_serve'
+alias ghl='gh_link'
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS
@@ -49,7 +52,9 @@ _link_title_gamehub() {
 }
 _link_any_gamehub() {
   ID=$1
-  if [[ $1 =~ [\-] ]]; then
+  if [[ $1 == '' ]]; then
+    echo "https://github.sie.sony.com/SIE-Private/rnps-game-hub/blob/master/packages/gamehub-deeplink-example/src/application/items.js"
+  elif [[ $1 =~ [\-] ]]; then
     _link_product_gamehub $1
   elif [[ $1 =~ [a-zA-Z] ]] ; then
     _link_title_gamehub $1
@@ -73,12 +78,12 @@ _open_editors_gamehub() {
   code $CODE_FOLDER_GH
 }
 _serve_all_gamehub() {
-  echo "Starting Manifest and App servers"
+  echo "Starting App server"
   trap "exit" INT TERM ERR
   trap "kill 0" EXIT
   _serve_manifest_gamehub
   _serve_app_gamehub
-  echo "P Manifest and App servers running ..."
+  echo "server running ..."
   wait
 }
 
@@ -93,5 +98,7 @@ fi
 
 # SERVE - open editors
 if [[ $* == *"-serve"* ]]; then
-  _serve_all_gamehub
+  # _serve_all_gamehub
+  cd $CODE_FOLDER_GH
+  yarn start
 fi

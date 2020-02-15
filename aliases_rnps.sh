@@ -7,8 +7,9 @@ MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
 
 alias p_cli='_p_cli'
 alias p_con='p_cli get console | sed "/^$/d"'
-alias p_man='_p_manifest_named gh'
+alias p_man='p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub'
 alias p_man_named='_p_manifest_named'
+alias p_man_local_named='_p_manifest_local_named'
 alias p_create_sample='_p_create_sample'
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
 alias p_die='p_cli kill SceShellUI'
@@ -18,6 +19,9 @@ _p_cli() {
   prospero-cli $CONSOLE_IP $@
 }
 _p_manifest_named() {
+  p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/$1
+}
+_p_manifest_local_named() {
   p_cli set manifest-url mhttp://$CONSOLE_IP.am.sony.com:8080/u/mmaher/$1
 }
 _p_create_sample() {
