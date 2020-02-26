@@ -24,6 +24,7 @@ CODE_FOLDER_GH=~/code/p/rnps-game-hub/packages/game-hub
 # -=  ALIASES
 # -=-=-=-=-=-=-=-=-=-=-=-=
 alias cdgh='cd $CODE_FOLDER_GH'
+alias cd_gh='cd $CODE_FOLDER_GH'
 alias gh_dev='bash $SCRIPT_FULL_PATH_GH -dev -serve'
 alias gh_code='bash $SCRIPT_FULL_PATH_GH -dev'
 alias gh_serve='bash $SCRIPT_FULL_PATH_GH -serve'

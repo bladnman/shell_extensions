@@ -1,6 +1,7 @@
 CONSOLE_IP='172.31.1.2'
 MACHINE_NAME='us38f9d32262b1'
-SAMPLE_FOLDER=~/code/p/z_testapps
+CODE_FOLDER_P=~/code/p
+SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
 SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
 MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
 
@@ -14,7 +15,47 @@ alias p_create_sample='_p_create_sample'
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
 alias p_die='p_cli kill SceShellUI'
 alias p_kill_shell='p_cli kill SceShellUI'
+alias cd_p='cd $CODE_FOLDER_P'
+alias p_ss='_p_screenshot'
+alias p_screen='_p_screenshot'
+alias p_snap='_p_screenshot'
 
+_p_screenshot() {
+  SS_NAME=$(date -u +'%Y-%m-%d_%H%M%S')
+  SS_PATH=$CODE_FOLDER_P/screenshots/$SS_NAME.png
+  IMG_EDITOR="/Applications/Snagit 2020.app/Contents/MacOS/Snagit 2020"
+  echo "starting snapshot process:"
+  echo "    ${SS_PATH}"
+
+  ## CAPTURE
+  p_cli get screenshot --file ${SS_PATH}
+  if [ ! -f $SS_PATH ]; then 
+    echo "error in fetching screenshot"
+    return 0 
+  fi
+
+  ## RESIZE
+  echo "resizing snapshot"
+  magick convert ${SS_PATH} -resize 50% ${SS_PATH}
+  if [ ! -f $SS_PATH ]; then 
+    echo "error in resizing screenshot"
+    return 0
+  fi
+
+  ## OPEN EDITOR
+  if [ -e $IMG_EDITOR ] 
+  then 
+    # & disown - returns control to shell and 
+    # allows you to close it with it killing app 
+    $IMG_EDITOR $SS_PATH & disown
+  else 
+    echo "------------"
+    echo "    ${IMG_EDITOR}"
+    echo "image editor not found"
+    echo "------------"
+    return 0
+  fi
+}
 _p_cli() {
   prospero-cli $CONSOLE_IP $@
 }
