@@ -17,8 +17,9 @@ SCRIPT_FULL_PATH_GH="$SCRIPT_DIR_GH/$(basename -- "$0")"
 # -=  VARS
 # -=-=-=-=-=-=-=-=-=-=-=-=
 MANIFEST_FOLDER_GH=~/code/p/ppr-urlconfig-dev
-CODE_FOLDER_GH=~/code/p/rnps-game-hub/packages/game-hub
-
+CODE_FOLDER_ROOT_GH=~/code/p/rnps-game-hub
+CODE_FOLDER_GH=$CODE_FOLDER_ROOT_GH/packages/game-hub
+SKYNETE_CHECKOUT_FOLDER=~/code/p/SkyNete
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  ALIASES
@@ -32,6 +33,10 @@ alias gh_link_concept='_link_concept_gamehub'
 alias gh_link_product='_link_product_gamehub'
 alias gh_link_title='_link_title_gamehub'
 alias gh_link='_link_any_gamehub'
+alias gh_tc='pytest --udid=$CONSOLE_IP -m '
+alias gh_qa_tc='pytest --udid=$CONSOLE_IP -m '
+alias gh_qa_prep='_qa_prepare'
+
 # short-short-handers
 alias ghs='gh_serve'
 alias ghl='gh_link'
@@ -63,7 +68,6 @@ _link_any_gamehub() {
     _link_concept_gamehub $1
   fi
 }
-
 _serve_manifest_gamehub() {
   cd $MANIFEST_FOLDER_GH
   yarn start &
@@ -86,6 +90,25 @@ _serve_all_gamehub() {
   _serve_app_gamehub
   echo "server running ..."
   wait
+}
+_qa_prepare() {
+  echo "Getting you ready for QA"
+  
+  echo "1. Create Virtual Environment"
+  cd $SKYNETE_CHECKOUT_FOLDER
+  python3 -m venv Skynete
+  source ./Skynete/bin/activate
+  
+  echo "2. Install GH QA Dependancies (longer)"
+  cd $CODE_FOLDER_ROOT_GH/tests/e2e
+  pip install -r requirements.txt
+
+  echo
+  echo
+  echo "Done."
+  echo "You can now execute test cases against your devkit. Example"
+  echo "   > gh_qa_tc tc85"
+  echo
 }
 
 

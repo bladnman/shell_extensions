@@ -4,11 +4,13 @@ CODE_FOLDER_P=~/code/p
 SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
 SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
 MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
+SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
 
 
 alias p_cli='_p_cli'
 alias p_con='p_cli get console | sed "/^$/d"'
 alias p_man='p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub'
+alias p_man_clear='p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub-clear'
 alias p_man_named='_p_manifest_named'
 alias p_man_local_named='_p_manifest_local_named'
 alias p_create_sample='_p_create_sample'
