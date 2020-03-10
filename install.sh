@@ -28,6 +28,8 @@ export SHELL_EXT_FOLDER
 # -=-=-=-=-=-=-=-=-=-=-=-=
 . $SHELL_EXT_FOLDER/project_portfolio.sh
 . $SHELL_EXT_FOLDER/project_gamehub.sh
+. $SHELL_EXT_FOLDER/iterm2.sh
+
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  BE HAPPY

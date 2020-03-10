@@ -5,22 +5,31 @@ SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
 SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
 MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
 SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
+export SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
 
 
-alias p_cli='_p_cli'
-alias p_con='p_cli get console | sed "/^$/d"'
-alias p_man='p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub'
-alias p_man_clear='p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub-clear'
+alias p_cli='prospero-cli $CONSOLE_IP'
+alias p_con='_p_cli get console | sed "/^$/d"'
+alias p_man='_p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub'
+alias p_man_clear='_p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub-clear'
 alias p_man_named='_p_manifest_named'
 alias p_man_local_named='_p_manifest_local_named'
 alias p_create_sample='_p_create_sample'
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
-alias p_die='p_cli kill SceShellUI'
-alias p_kill_shell='p_cli kill SceShellUI'
+alias p_die='_p_cli kill SceShellUI'
+alias p_kill_shell='_p_cli kill SceShellUI'
+alias p_disco='_p_cli force-disconnect'
+alias p_get_info="_p_info_formatted"
+alias p_get_extended="_p_extended_info_formatted"
+alias p_get_user='_p_user_formatted'
+alias p_get_manifest='_p_manifest_formatted'
+alias p_reboot='_p_cli reboot'
 alias cd_p='cd $CODE_FOLDER_P'
 alias p_ss='_p_screenshot'
 alias p_screen='_p_screenshot'
 alias p_snap='_p_screenshot'
+alias p_repo='_p_find_repo'
+alias find_repo='_p_find_repo'
 
 _p_screenshot() {
   SS_NAME=$(date -u +'%Y-%m-%d_%H%M%S')
@@ -61,11 +70,26 @@ _p_screenshot() {
 _p_cli() {
   prospero-cli $CONSOLE_IP $@
 }
+_p_info_formatted() {
+  _p_cli get info | sed -e "s/'/\"/g" | jq
+}
+_p_manifest_formatted() {
+  echo "asking for manifest..."
+  _p_cli get manifest-url | sed -e "s/.*= //g"
+}
+_p_user_formatted() {
+  # this is sweet shell magic
+  _p_cli get current-user | awk '{printf "%s+",$0} END {print ""}' | sed -e "s/^.*{/{/" | sed -e "s/}.*$/}/" | sed -e "s/'/\"/g" | jq
+}
+_p_extended_info_formatted() {
+  # this is sweet shell magic
+  _p_cli get extended | awk '{printf "%s+",$0} END {print ""}' | sed -e "s/^.*{/{/" | sed -e "s/}.*$/}/" | sed -e "s/'/\"/g" | jq
+}
 _p_manifest_named() {
-  p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/$1
+  prospero-cli $CONSOLE_IP set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/$1
 }
 _p_manifest_local_named() {
-  p_cli set manifest-url mhttp://$CONSOLE_IP.am.sony.com:8080/u/mmaher/$1
+  prospero-cli $CONSOLE_IP set manifest-url mhttp://$CONSOLE_IP.am.sony.com:8080/u/mmaher/$1
 }
 _p_create_sample() {
   APP_NAME=$1
@@ -97,4 +121,34 @@ _p_create_sample() {
   git init
   echo
   echo 'Welcome to your new sample application'
+}
+_p_find_repo() {
+  REPO_NAME=$1
+  REPO_URL=`_find_repo $REPO_NAME`
+
+  if [ -z "$REPO_URL" ]
+  then
+    # empty? some mondo repo items can't be found this way
+    # let's offer a direct search url for them
+    REPO_ENCODED=$(echo $REPO_NAME | sed -e "s/@/%2A/g" | sed -e "s/\//%2F/g")
+    SEARCH_URL="https://github.sie.sony.com/search?q=language%3A%22json%22+name$REPO_ENCODED&type=Code"
+    echo $SEARCH_URL
+  else
+    echo $REPO_URL
+  fi
+}
+_find_repo() {
+  REPO_NAME=$1
+  REPO_GIT_URI=`npm view $REPO_NAME repository.url`
+  REPO_URL=$REPO_GIT_URI
+  # some are urls and some are uris
+  if [[ $REPO_GIT_URI =~ [@] ]]; then
+    REPO_URL=$(echo $REPO_GIT_URI | sed -e "s/:/\//" | sed -e "s/.*@/http:\/\//")
+  elif [[ $REPO_GIT_URI =~ [git+http] ]]; then
+    REPO_URL=$(echo $REPO_GIT_URI | sed -e "s/git\+//")
+  elif [[ $REPO_GIT_URI =~ [git:] ]]; then
+    REPO_URL=$(echo $REPO_GIT_URI | sed -e "s/git:/http:/")
+  fi
+
+  echo $REPO_URL
 }
