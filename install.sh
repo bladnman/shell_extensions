@@ -8,27 +8,34 @@ SCRIPT_FULL_PATH="$SCRIPT_DIR/$(basename -- "$0")"
 SHELL_EXT_FOLDER=$SCRIPT_DIR
 export SHELL_EXT_FOLDER
 
-# -=-=-=-=-=-=-=-=-=-=-=-=
-# -=  ENVIRONMENT
-# -=-=-=-=-=-=-=-=-=-=-=-=
-. $SHELL_EXT_FOLDER/colors.sh
-# . $SHELL_EXT_FOLDER/environment.sh
+# - - - -
+# - ENVIRONMENT
+# - - - -
+. $SHELL_EXT_FOLDER/env/colors.sh
+. $SHELL_EXT_FOLDER/env/color_echo.sh
+. $SHELL_EXT_FOLDER/env/shell_aliases.sh
+. $SHELL_EXT_FOLDER/env/git_main.sh
 
-# -=-=-=-=-=-=-=-=-=-=-=-=
-# -=  ALIASES
-# -=-=-=-=-=-=-=-=-=-=-=-=
 . $SHELL_EXT_FOLDER/aliases.sh
-. $SHELL_EXT_FOLDER/aliases_rnps.sh
-. $SHELL_EXT_FOLDER/aliases_shell.sh
 . $SHELL_EXT_FOLDER/aliases_code.sh
-. $SHELL_EXT_FOLDER/aliases_democrotizer.sh
+. $SHELL_EXT_FOLDER/searching.sh
 
-# -=-=-=-=-=-=-=-=-=-=-=-=
-# -=  PROJECTS
-# -=-=-=-=-=-=-=-=-=-=-=-=
-. $SHELL_EXT_FOLDER/project_portfolio.sh
-. $SHELL_EXT_FOLDER/project_gamehub.sh
-. $SHELL_EXT_FOLDER/iterm2.sh
+# - - - -
+# - PROJECTS
+# - - - -
+. $SHELL_EXT_FOLDER/project/democrotizer_main.sh
+. $SHELL_EXT_FOLDER/project/portfolio_main.sh
+
+# - - - -
+# - PROGRAMS
+# - - - -
+. $SHELL_EXT_FOLDER/prog/iterm2.sh
+
+# - - - -
+# - P
+# - - - -
+. $SHELL_EXT_FOLDER/p/rnps_main.sh
+. $SHELL_EXT_FOLDER/p/gh_main.sh
 
 
 # -=-=-=-=-=-=-=-=-=-=-=-=

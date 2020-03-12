@@ -27,40 +27,41 @@ SKYNETE_CHECKOUT_FOLDER=~/code/p/SkyNete
 # -=-=-=-=-=-=-=-=-=-=-=-=
 alias cdgh='cd $CODE_FOLDER_GH'
 alias cd_gh='cd $CODE_FOLDER_GH'
-alias gh_dev='bash $SCRIPT_FULL_PATH_GH -dev -serve'
-alias gh_code='bash $SCRIPT_FULL_PATH_GH -dev'
-alias gh_serve='bash $SCRIPT_FULL_PATH_GH -serve'
-alias gh_link_concept='_link_concept_gamehub'
-alias gh_link_product='_link_product_gamehub'
-alias gh_link_title='_link_title_gamehub'
-alias gh_link='_link_any_gamehub'
+alias gh_dev='_gh__setup_env -dev -serve'
+alias gh_code='_gh__setup_env -dev'
+alias gh_serve='_gh__setup_env -serve'
+alias gh_link_concept='_gh__link_concept_gamehub'
+alias gh_link_product='_gh__link_product_gamehub'
+alias gh_link_title='_gh__link_title_gamehub'
+alias gh_link='_gh__link_any_gamehub'
 alias gh_tc='pytest --udid=$CONSOLE_IP -m '
 alias gh_qa_tc='pytest --udid=$CONSOLE_IP -m '
-alias gh_qa_prep='_qa_prepare'
-alias smoke='_run_e2e_smoke'
-alias gh_qa_build_push='_build_and_push_for_qa'
+alias gh_qa_prep='_gh__qa_prepare'
+alias gh_qa_build_push='_gh__build_and_push_for_qa'
+alias gh_qa_checkout_build_and_push='_gh__qa_checkout_build_and_push'
 
 # short-short-handers
-alias tc='_run_e2e_tc'
+alias smoke='_gh__run_e2e_smoke'
+alias tc='_gh__run_e2e_tc'
 alias ghs='gh_serve'
 alias ghl='gh_link'
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS
 # -=-=-=-=-=-=-=-=-=-=-=-=
-_link_concept_gamehub() {
+_gh__link_concept_gamehub() {
   echo p_cli execute shellui "openuri psgamehub:main?conceptId=$@"
   p_cli execute shellui "openuri psgamehub:main?conceptId=$@"
 }
-_link_product_gamehub() {
+_gh__link_product_gamehub() {
   echo p_cli execute shellui "openuri psgamehub:main?productId=$@"
   p_cli execute shellui "openuri psgamehub:main?productId=$@"
 }
-_link_title_gamehub() {
+_gh__link_title_gamehub() {
   echo p_cli execute shellui "openuri psgamehub:main?titleId=$@"
   p_cli execute shellui "openuri psgamehub:main?titleId=$@"
 }
-_build_and_push_for_qa() {
+_gh__build_and_push_for_qa() {
 
   echo
   echo
@@ -90,7 +91,7 @@ _build_and_push_for_qa() {
   echo "+-----------------"
   echo "Done. Published to /data/rnps/gamehub-bun/"
 }
-_run_e2e_tc() {
+_gh__run_e2e_tc() {
   PARAM=$1
   LOWER_PARAM=`printf '%s\n' "$PARAM" | awk '{ print tolower($0) }'`
 
@@ -104,46 +105,46 @@ _run_e2e_tc() {
   echo pytest --udid=${CONSOLE_IP} -m ${LOWER_PARAM}
   pytest --udid=${CONSOLE_IP} -m ${LOWER_PARAM}
 }
-_run_e2e_smoke() {
+_gh__run_e2e_smoke() {
   echo pytest --udid=${CONSOLE_IP} --suite=Smoke-Manual --qtest-enable tests
   pytest --udid=${CONSOLE_IP} --suite=Smoke-Manual --qtest-enable tests
 }
-_link_any_gamehub() {
+_gh__link_any_gamehub() {
   ID=$1
   if [[ $1 == '' ]]; then
     echo "https://github.sie.sony.com/SIE-Private/rnps-game-hub/blob/master/packages/gamehub-deeplink-example/src/application/items.js"
   elif [[ $1 =~ [\-] ]]; then
-    _link_product_gamehub $1
+    _gh__link_product_gamehub $1
   elif [[ $1 =~ [a-zA-Z] ]] ; then
-    _link_title_gamehub $1
+    _gh__link_title_gamehub $1
   else 
-    _link_concept_gamehub $1
+    _gh__link_concept_gamehub $1
   fi
 }
-_serve_manifest_gamehub() {
+_gh__serve_manifest_gamehub() {
   cd $MANIFEST_FOLDER_GH
   yarn start &
   sleep 1
 }
-_serve_app_gamehub() {
+_gh__serve_app_gamehub() {
   cd $CODE_FOLDER_GH
   yarn start &
   sleep 1
 }
-_open_editors_gamehub() {
+_gh__open_editors_gamehub() {
   echo "Attempting to open editor to GAMEHUB"
   code $CODE_FOLDER_GH
 }
-_serve_all_gamehub() {
+_gh__serve_all_gamehub() {
   echo "Starting App server"
   trap "exit" INT TERM ERR
   trap "kill 0" EXIT
-  _serve_manifest_gamehub
-  _serve_app_gamehub
+  _gh__serve_manifest_gamehub
+  _gh__serve_app_gamehub
   echo "server running ..."
   wait
 }
-_qa_prepare() {
+_gh__qa_prepare() {
   echo "Getting you ready for QA"
 
   echo "1. Create Virtual Environment"
@@ -163,19 +164,77 @@ _qa_prepare() {
   echo "   > gh_qa_tc tc85"
   echo
 }
+_gh__setup_env() {
+  # DEV - open editors
+  if [[ $* == *"-dev"* ]]; then
+    _gh__open_editors_gamehub
+  fi
+
+  # SERVE - open editors
+  if [[ $* == *"-serve"* ]]; then
+    # _gh__serve_all_gamehub
+    cd $CODE_FOLDER_GH
+    yarn start
+  fi
+}
+_gh__qa_checkout_build_and_push() {
+  # function that will 
+  #   - take in a branch name
+  #   - go to GH repo root folder
+  #   - checkout that branch
+  #   - yarn && build
+  #   - push to console
+  #   - set console manifest to QA
+  # These steps are preceded by a few git
+  # checks to mnke sure there are no changes in 
+  # current env... thus, safe to checkout
+  # NOTE: 
+  #   git commands require functions set up
+  #   by other shell_extention scripts 
+  #   (git_main.sh at the moment)
+
+  # must send a branch name to us
+  BRANCH=$1
+
+  # use a little bash magic var
+  START_TIME=$SECONDS
+
+  echo
+  echo 
+  echo "➡️ GameHub : Checkout : Build : Push (starting)"
+
+  cd $CODE_FOLDER_ROOT_GH
+
+  # bail - not a git repo
+  if [[ -z $BRANCH ]] ; then
+    echo_error "❌ You must send a branch name to checkout"
+    return
+  fi
+
+  # bail - not a git repo
+  if _git__isnot_git_tree ; then
+    echo "Current folder contains no git repo"
+    return
+  fi
+
+  # bail - changes in this git tree
+  if _git__has_changes ; then
+    echo_error "❌ There are unhandled changes in this git tree."
+    echo "This command only works on a clean tree."
+    return
+  fi
+
+  echo_green "✅ Looks like we will be moving on!"
+  ELAPSED_TIME=$(($SECONDS - $START_TIME))
+  
+    
+  
+  
 
 
-# -=-=-=-=-=-=-=-=-=-=-=-=
-# -=  MAIN
-# -=-=-=-=-=-=-=-=-=-=-=-=
-# DEV - open editors
-if [[ $* == *"-dev"* ]]; then
-  _open_editors_gamehub
-fi
 
-# SERVE - open editors
-if [[ $* == *"-serve"* ]]; then
-  # _serve_all_gamehub
-  cd $CODE_FOLDER_GH
-  yarn start
-fi
+
+  
+  # COMPLETE : DURATION
+  echo_green "⬅️ Completed in $(displaytime $ELAPSED_TIME)"
+}
