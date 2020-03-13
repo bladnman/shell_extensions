@@ -12,7 +12,6 @@
 SCRIPT_DIR_GH=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
 SCRIPT_FULL_PATH_GH="$SCRIPT_DIR_GH/$(basename -- "$0")"
 
-
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  VARS
 # -=-=-=-=-=-=-=-=-=-=-=-=
@@ -38,7 +37,7 @@ alias gh_tc='pytest --udid=$CONSOLE_IP -m '
 alias gh_qa_tc='pytest --udid=$CONSOLE_IP -m '
 alias gh_qa_prep='_gh__qa_prepare'
 alias gh_qa_build_push='_gh__build_and_push_for_qa'
-alias gh_qa_checkout_build_and_push='_gh__qa_checkout_build_and_push'
+alias gh_build_and_push='. ${SCRIPT_DIR_GH}/scripts/gh_qa_stage_branch.sh '
 
 # short-short-handers
 alias smoke='_gh__run_e2e_smoke'
@@ -86,6 +85,7 @@ _gh__build_and_push_for_qa() {
   echo "+-----------------"
   echo "Pushing to console (please wait)..."
   p_cli upload --host-path=./bundles --target-path=/data/rnps/gamehub-bun/ --is-directory
+
   echo
   echo
   echo "+-----------------"
@@ -93,7 +93,7 @@ _gh__build_and_push_for_qa() {
 }
 _gh__run_e2e_tc() {
   PARAM=$1
-  LOWER_PARAM=`printf '%s\n' "$PARAM" | awk '{ print tolower($0) }'`
+  LOWER_PARAM=$(printf '%s\n' "$PARAM" | awk '{ print tolower($0) }')
 
   if [[ $LOWER_PARAM != *"tc"* ]]; then
     LOWER_PARAM=tc$LOWER_PARAM
@@ -115,9 +115,9 @@ _gh__link_any_gamehub() {
     echo "https://github.sie.sony.com/SIE-Private/rnps-game-hub/blob/master/packages/gamehub-deeplink-example/src/application/items.js"
   elif [[ $1 =~ [\-] ]]; then
     _gh__link_product_gamehub $1
-  elif [[ $1 =~ [a-zA-Z] ]] ; then
+  elif [[ $1 =~ [a-zA-Z] ]]; then
     _gh__link_title_gamehub $1
-  else 
+  else
     _gh__link_concept_gamehub $1
   fi
 }
@@ -151,7 +151,7 @@ _gh__qa_prepare() {
   cd $SKYNETE_CHECKOUT_FOLDER
   python3 -m venv Skynete
   source ./Skynete/bin/activate
-  
+
   echo "2. Install GH QA Dependancies (longer)"
   cd $TEST_E2E_FOLDER
   pip install -r requirements.txt
@@ -178,7 +178,7 @@ _gh__setup_env() {
   fi
 }
 _gh__qa_checkout_build_and_push() {
-  # function that will 
+  # function that will
   #   - take in a branch name
   #   - go to GH repo root folder
   #   - checkout that branch
@@ -186,12 +186,15 @@ _gh__qa_checkout_build_and_push() {
   #   - push to console
   #   - set console manifest to QA
   # These steps are preceded by a few git
-  # checks to mnke sure there are no changes in 
+  # checks to mnke sure there are no changes in
   # current env... thus, safe to checkout
-  # NOTE: 
+  # NOTE:
   #   git commands require functions set up
-  #   by other shell_extention scripts 
+  #   by other shell_extention scripts
   #   (git_main.sh at the moment)
+
+  # where should all of this end up on the console?
+  CONSOLE_QA_GH_PATH=/data/rnps/gamehub-bun/
 
   # must send a branch name to us
   BRANCH=$1
@@ -200,41 +203,100 @@ _gh__qa_checkout_build_and_push() {
   START_TIME=$SECONDS
 
   echo
-  echo 
-  echo "➡️ GameHub : Checkout : Build : Push (starting)"
-
+  echo
+  echo_blue "➡️ GameHub : Checkout : Build : Push (starting)"
+  echo
+  echo_blue "  - - - - - - -"
+  echo_blue "∙ Moving to GameHub root directory ..."
+  echo
   cd $CODE_FOLDER_ROOT_GH
 
   # bail - not a git repo
-  if [[ -z $BRANCH ]] ; then
+  if [[ -z $BRANCH ]]; then
     echo_error "❌ You must send a branch name to checkout"
     return
   fi
 
   # bail - not a git repo
-  if _git__isnot_git_tree ; then
+  if _git__isnot_git_tree; then
     echo "Current folder contains no git repo"
     return
   fi
 
   # bail - changes in this git tree
-  if _git__has_changes ; then
+  if _git__has_changes; then
     echo_error "❌ There are unhandled changes in this git tree."
     echo "This command only works on a clean tree."
     return
   fi
 
-  echo_green "✅ Looks like we will be moving on!"
-  ELAPSED_TIME=$(($SECONDS - $START_TIME))
-  
-    
-  
-  
+  # checkout
+  echo
+  echo_blue "  - - - - - - -"
+  echo_blue "∙ Checking out branch [${BRANCH}] ..."
+  echo
+  git checkout $BRANCH
 
+  # validate we got the right one
+  if [[ $BRANCH != $(_git__current_branch_name) ]]; then
+    echo $BRANCH
+    echo $(_git__current_branch_name)
+    echo_error "❌ It seems like our checkout did not work"
+    echo "Possible that you asked for a branch that does not exist?"
+    return
+  fi
 
+  # pull
+  echo
+  echo_blue "  - - - - - - -"
+  echo_blue "∙ git pull'ing ..."
+  echo
+  git pull
 
+  # updating modules
+  echo
+  echo_blue "  - - - - - - -"
+  echo_blue "∙ yarn updating ..."
+  echo
+  yarn
 
-  
+  # building
+  echo
+  echo_blue "  - - - - - - -"
+  echo_blue "∙ building for ci ..."
+  echo
+  npm run ci:build
+
+  echo
+  echo_blue "  - - - - - - -"
+  echo_blue "∙ pushing to console [${CONSOLE_QA_GH_PATH}] ..."
+  echo
+  p_cli upload --host-path=./bundles --target-path=${CONSOLE_QA_GH_PATH} --is-directory
+
+  # moving manifest
+  if _cmd__exists "p_man_qa"; then
+    echo
+    echo_blue "  - - - - - - -"
+    echo_blue "∙ moving manifest to QA manifest ..."
+    echo
+    p_man_qa
+
+    # look for errors
+    if [[ $_ =~ RuntimeError ]]; then
+      echo_error "❌ It looks like setting the manifest did not work"
+      return
+    fi
+
+  else
+    echo
+    echo_yellow "  - - - - - - -"
+    echo_yellow "∙ the $(p_man_qa) command was not found"
+    echo_yellow "∙ make sure your manifest uses the local folder for gamehub"
+  fi
+
   # COMPLETE : DURATION
-  echo_green "⬅️ Completed in $(displaytime $ELAPSED_TIME)"
+  echo
+  echo_green "  - - - - - - -"
+  ELAPSED_TIME=$(($SECONDS - $START_TIME))
+  echo_green "✅ All done! Completed in $(displaytime $ELAPSED_TIME)"
 }

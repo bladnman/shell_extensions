@@ -13,3 +13,10 @@ alias h='history'
 alias hg='history | grep'
 alias bi="brew install"
 alias ag='alias | grep'
+
+_cmd__exists() {
+  if [[ `which ${1}` =~ not\ found ]] ; then
+    false; return
+  fi
+  true; return
+}

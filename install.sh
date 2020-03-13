@@ -35,7 +35,7 @@ export SHELL_EXT_FOLDER
 # - P
 # - - - -
 . $SHELL_EXT_FOLDER/p/rnps_main.sh
-. $SHELL_EXT_FOLDER/p/gh_main.sh
+. $SHELL_EXT_FOLDER/p/gamehub/gh_main.sh
 
 
 # -=-=-=-=-=-=-=-=-=-=-=-=

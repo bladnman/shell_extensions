@@ -39,11 +39,18 @@ _git__status() {
   # standard out and standard error
   echo $( git status --porcelain 2>&1)
 }
-_git__branch_exists() {
-  # https://stackoverflow.com/questions/5167957/is-there-a-better-way-to-find-out-if-a-local-git-branch-exists
+_git__local_branch_exists() {
+  # https://stackoverflow.com/q/5167957/473501
   #
-  # note: this only checks local-known branches AFAIK
+  # note: this only checks local-known branches!
   #
   git show-ref --verify --quiet refs/heads/$1
   # $? == 0 means local branch with <branch-name> exists. 
+}
+_git__current_branch_name() {
+  # https://stackoverflow.com/a/24210877/473501
+  git branch --no-color | grep -E '^\*' | awk '{print $2}' \
+    || echo "default_value"
+  # or
+  # git symbolic-ref --short -q HEAD || echo "default_value";
 }

@@ -2,9 +2,12 @@
 alias echo_log='_echo__log'
 alias echo_green='_echo__green'
 alias echo_error='_echo__red'
-alias echo_red'_echo__red'
+alias echo_red='_echo__red'
 alias echo_warn='_echo__yellow'
 alias echo_yellow='_echo__yellow'
+
+alias echo_blue='_echo__blue'
+alias echo_orange='_echo__orange'
 
 _echo__log() {
   echo $1
@@ -17,6 +20,12 @@ _echo__red() {
 }
 _echo__green() {
   echo "${SH_COLOR_GREEN}${1}${SH_COLOR_NC}"
+}
+_echo__blue() {
+  echo "${SH_COLOR_BLUE}${1}${SH_COLOR_NC}"
+}
+_echo__orange() {
+  echo "${SH_COLOR_ORANGE}${1}${SH_COLOR_NC}"
 }
 # give seconds will print dhms
 function displaytime {

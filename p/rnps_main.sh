@@ -1,4 +1,4 @@
-CONSOLE_IP='172.31.1.2'
+CONSOLE_IP='10.125.43.243'
 MACHINE_NAME='us38f9d32262b1'
 CODE_FOLDER_P=~/code/p
 SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
@@ -6,7 +6,6 @@ SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
 MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
 SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
 export SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
-
 
 alias p_cli='prospero-cli $CONSOLE_IP'
 alias p_con='_p_cli get console | sed "/^$/d"'
@@ -42,26 +41,26 @@ _p_screenshot() {
 
   ## CAPTURE
   p_cli get screenshot --file ${SS_PATH}
-  if [ ! -f $SS_PATH ]; then 
+  if [ ! -f $SS_PATH ]; then
     echo "error in fetching screenshot"
-    return 0 
+    return 0
   fi
 
   ## RESIZE
   echo "resizing snapshot"
   magick convert ${SS_PATH} -resize 50% ${SS_PATH}
-  if [ ! -f $SS_PATH ]; then 
+  if [ ! -f $SS_PATH ]; then
     echo "error in resizing screenshot"
     return 0
   fi
 
   ## OPEN EDITOR
-  if [ -e $IMG_EDITOR ] 
-  then 
-    # & disown - returns control to shell and 
-    # allows you to close it with it killing app 
-    $IMG_EDITOR $SS_PATH & disown
-  else 
+  if [ -e $IMG_EDITOR ]; then
+    # & disown - returns control to shell and
+    # allows you to close it with it killing app
+    $IMG_EDITOR $SS_PATH &
+    disown
+  else
     echo "------------"
     echo "    ${IMG_EDITOR}"
     echo "image editor not found"
@@ -99,21 +98,21 @@ _p_create_sample() {
   echo
   # echo 'You asked to create a new sample app named: ' $APP_NAME
   if [ ! -d "$SAMPLE_FOLDER" ]; then
-      echo "error: Sample folder does not exist"
-      echo "    $SAMPLE_FOLDER"
-      echo "This is where all samples live, including the sample app template."
-      return 0
+    echo "error: Sample folder does not exist"
+    echo "    $SAMPLE_FOLDER"
+    echo "This is where all samples live, including the sample app template."
+    return 0
   fi
   if [ ! -d "$SAMPLE_APP_FOLDER" ]; then
-      echo "error: Sample app folder does not exist"
-      echo "    $SAMPLE_APP_FOLDER"
-      echo "This is the sample app template and is needed to create a new app."
-      return 0
+    echo "error: Sample app folder does not exist"
+    echo "    $SAMPLE_APP_FOLDER"
+    echo "This is the sample app template and is needed to create a new app."
+    return 0
   fi
   if [ -d "$FINAL_APP_DIRECTORY" ]; then
-      echo "error: APP NAME IS ALREADY IN USE. Choose another"
-      echo "    $FINAL_APP_DIRECTORY     <- already exists"
-      return 0
+    echo "error: APP NAME IS ALREADY IN USE. Choose another"
+    echo "    $FINAL_APP_DIRECTORY     <- already exists"
+    return 0
   fi
 
   echo 'creating your new sample app...'
@@ -126,10 +125,9 @@ _p_create_sample() {
 }
 _p_find_repo() {
   REPO_NAME=$1
-  REPO_URL=`_find_repo $REPO_NAME`
+  REPO_URL=$(_find_repo $REPO_NAME)
 
-  if [ -z "$REPO_URL" ]
-  then
+  if [ -z "$REPO_URL" ]; then
     # empty? some mondo repo items can't be found this way
     # let's offer a direct search url for them
     REPO_ENCODED=$(echo $REPO_NAME | sed -e "s/@/%2A/g" | sed -e "s/\//%2F/g")
@@ -141,7 +139,7 @@ _p_find_repo() {
 }
 _find_repo() {
   REPO_NAME=$1
-  REPO_GIT_URI=`npm view $REPO_NAME repository.url`
+  REPO_GIT_URI=$(npm view $REPO_NAME repository.url)
   REPO_URL=$REPO_GIT_URI
   # some are urls and some are uris
   if [[ $REPO_GIT_URI =~ [@] ]]; then
