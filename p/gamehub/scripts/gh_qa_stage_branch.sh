@@ -2,38 +2,41 @@
 ## - - - - - - - -
 ## CONFIG
 ## - - - - - - - -
-#
-#
+
 # Root repo folder for rnps-game-hub
-__CODE_FOLDER_ROOT_GH=~/code/p/rnps-game-hub
+# __SOURCE_PATH=~/code/p/rnps-game-hub
+__SOURCE_PATH=
 
 # Console folder for builds
-# __CONSOLE_DEST_PATH=/data/rnps/gamehub-bun/
-__CONSOLE_DEST_PATH=
+# __DEST_PATH=/data/rnps/gamehub-bun/
+__DEST_PATH=
 
 # Console IP
 # ARGUMENT:
 #    -ip=<IP>
-__CONSOLE_IP=10.125.43.243 # default to this... can be set with param: -ip=<IP>
+__CONSOLE_IP=
 
 # QA Manifest Name
 # leave blank to not set manifest
 # ARGUMENT:
 #
-__MANIFEST_URL=mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub-qa
-
-# Build as dev build
-__IS_DEV=false
+# __MANIFEST_URL=mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub-qa
+__MANIFEST_URL=
 
 # Branch to build by default
 # leave blank to build what is on disk at the moment
 __BRANCH=
 
+# Build as dev build
+__IS_DEV=false
+
 ## end config
 ## - - - - - - - - -
 
-_SCRIPT_NAME_='GameHub Build and Pusher'
+_SCRIPT_TITLE_='GameHub Build and Pusher'
 __IS_REQUESTING_HELP=false
+__SCRIPT_FULL_PATH=$0
+__SCRIPT_NAME=$(basename "$0")
 
 function _main() {
   # function that will
@@ -60,14 +63,22 @@ function _main() {
     return
   fi
 
+  # used when testing
+  # echo "__BRANCH        = ${__BRANCH}"
+  # echo "__CONSOLE_IP    = ${__CONSOLE_IP}"
+  # echo "__SOURCE_PATH   = ${__SOURCE_PATH}"
+  # echo "__DEST_PATH     = ${__DEST_PATH}"
+  # echo "__MANIFEST_URL  = ${__MANIFEST_URL}"
+  # return
+
   echo
   echo
-  __echo_blue "➡️ ${_SCRIPT_NAME_} : starting"
+  __echo_blue "➡️  ${_SCRIPT_TITLE_} : starting"
   echo
   __echo_blue "  - - - - - - -"
   __echo_blue "∙ Moving to GameHub root directory ..."
   echo
-  cd $__CODE_FOLDER_ROOT_GH
+  cd $__SOURCE_PATH
 
   # do all branch work
   # verify clean, checkout, update
@@ -95,19 +106,31 @@ function _main() {
 
   echo
   __echo_blue "  - - - - - - -"
-  __echo_blue "∙ pushing to console [${__CONSOLE_DEST_PATH}] ..."
+  __echo_blue "∙ force-disconnection on devkit: give us control ..."
   echo
-  prospero-cli $__CONSOLE_IP upload --host-path=./bundles --target-path=${__CONSOLE_DEST_PATH} --is-directory
+  prospero-cli $__CONSOLE_IP force-disconnect
+
+  echo
+  __echo_blue "  - - - - - - -"
+  __echo_blue "∙ pushing to console [${__DEST_PATH}] ..."
+  echo
+  prospero-cli $__CONSOLE_IP upload --host-path=./bundles --target-path=${__DEST_PATH} --is-directory
 
   # moving manifest
   if [[ ! -z $__MANIFEST_URL ]]; then
     echo
     __echo_blue "  - - - - - - -"
-    __echo_blue "∙ moving manifest to QA manifest ..."
+    __echo_blue "∙ pointing devkit to manifest url ..."
+    echo "   ${__MANIFEST_URL}"
     echo
+    # set manifest
     prospero-cli $__CONSOLE_IP set manifest-url $__MANIFEST_URL
+    # restart the shellUI to pick up manifest change
+    __echo_blue "∙ restarting SceShellUI ..."
+    prospero-cli $__CONSOLE_IP kill SceShellUI
 
   else
+
     echo
     __echo_yellow "  - - - - - - -"
     __echo_yellow "∙ no manifest url value"
@@ -130,27 +153,45 @@ function _init() {
   __set_colors_if_unset
 }
 function __hasAllRequiredParams() {
-  if [[ -z $__CODE_FOLDER_ROOT_GH ]] ||
-    [[ -z $__CONSOLE_IP ]] ||
-    [[ -z $__CONSOLE_DEST_PATH ]]; then
+  if [[ -z $__SOURCE_PATH ]] || [[ -z $__CONSOLE_IP ]] || [[ -z $__DEST_PATH ]]; then
+    echo
+    echo
+    __echo_yellow "${_SCRIPT_TITLE_} Error:"
+    if [[ -z $__SOURCE_PATH ]]; then
+      __echo_red "  -s    Source path is required, but missing"
+    fi
+    if [[ -z $__CONSOLE_IP ]]; then
+      __echo_red "  -i    IP is required, but missing"
+    fi
+    if [[ -z $__DEST_PATH ]]; then
+      __echo_red "  -d    Destination path is required, but missing"
+    fi
+    echo
     false
-  else
-    true
+    return
   fi
+
+  true
 }
 function __printUsage() {
-  __echo_yellow "${_SCRIPT_NAME_} : usage"
-
+  echo "+--------------------------------------+"
+  __echo_yellow "${_SCRIPT_TITLE_}"
+  SCRIPT_BASE_NAME=$(basename -- "$0")
   SCRIPT_DIR=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
   SCRIPT_FULL_PATH="$SCRIPT_DIR/$(basename -- "$0")"
 
   echo "Usage:"
+  echo " All arguments must be in the form of"
+  echo "    [option]=value"
+  echo " Ex:"
+  __echo_yellow "    ${__SCRIPT_NAME} -i=172.1.1.1 -d=/path/on/console -s=/path/to/gamehubrepo"
+  echo
   echo "  REQUIRED"
   echo "  -i, -ip, -ip-address        ip address of console."
-  echo "  -d, -dest, -destination     full path on the console"
-  echo "                              where build we be placed."
-  echo "  -s, -source                 root directory to gamehub; "
-  echo "                              where you cloned the repo."
+  echo "  -d, -dest, -destination     full destination path on the console"
+  echo "                              where the build we be placed."
+  echo "  -s, -source                 root source path to gamehub; "
+  echo "                              where you cloned the repo locally."
   echo
   echo "  OPTIONAL"
   echo "  -b, -branch                 branch name:"
@@ -159,7 +200,7 @@ function __printUsage() {
   echo "  -m, -manifest-url           manifest url to set on console:"
   echo "                                - if empty manifest will not be set."
   echo "  -dev                        build in dev mode (skips minify)."
-
+  echo "+--------------------------------------+"
 }
 function __checkoutBranch() {
 
@@ -221,7 +262,7 @@ function __setParams() {
       shift
       ;;
     -s=* | -source=*)
-      __CODE_FOLDER_ROOT_GH="${cleanParam#*=}"
+      __SOURCE_PATH="${cleanParam#*=}"
       shift
       ;;
     -i=* | -ip=* | -ip-address=*)
@@ -229,7 +270,7 @@ function __setParams() {
       shift
       ;;
     -d=* | -dest=* | -destination=*)
-      __CONSOLE_DEST_PATH="${cleanParam#*=}"
+      __DEST_PATH="${cleanParam#*=}"
       shift
       ;;
     -b=* | -branch=*)
@@ -240,7 +281,7 @@ function __setParams() {
       __IS_DEV=true
       shift
       ;;
-    -h=* | -help)
+    -h | -help)
       __IS_REQUESTING_HELP=true
       shift
       ;;
@@ -251,9 +292,9 @@ function __setParams() {
   done
 
   # echo "__MANIFEST_URL          = ${__MANIFEST_URL}"
-  # echo "__CODE_FOLDER_ROOT_GH   = ${__CODE_FOLDER_ROOT_GH}"
+  # echo "__SOURCE_PATH   = ${__SOURCE_PATH}"
   # echo "__CONSOLE_IP            = ${__CONSOLE_IP}"
-  # echo "__CONSOLE_DEST_PATH     = ${__CONSOLE_DEST_PATH}"
+  # echo "__DEST_PATH     = ${__DEST_PATH}"
   # echo "__BRANCH                = ${__BRANCH}"
   # echo "__IS_DEV                = ${__IS_DEV}"
 }

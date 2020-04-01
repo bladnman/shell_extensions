@@ -13,25 +13,47 @@ alias p_man='_p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/m
 alias p_man_clear='_p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub-clear'
 alias p_man_named='_p_manifest_named'
 alias p_man_local_named='_p_manifest_local_named'
-alias p_man_gh='_p_manifest_named game-hub'
-alias p_man_qa='_p_manifest_named game-hub-qa'
+alias p_man_gh='_p_manifest_named game-hub; p_kill_shell'
+alias p_man_qa='_p_manifest_named game-hub-qa; p_kill_shell'
 alias p_create_sample='_p_create_sample'
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
-alias p_die='_p_cli kill SceShellUI'
 alias p_kill_shell='_p_cli kill SceShellUI'
 alias p_disco='_p_cli force-disconnect'
 alias p_get_info="_p_info_formatted"
 alias p_get_extended="_p_extended_info_formatted"
 alias p_get_user='_p_user_formatted'
 alias p_get_manifest='_p_manifest_formatted'
+alias p_get_manifest_contents='_p_manifest_contents_formatted'
 alias p_reboot='_p_cli reboot'
 alias cd_p='cd $CODE_FOLDER_P'
 alias p_ss='_p_screenshot'
+
 alias p_screen='_p_screenshot'
 alias p_snap='_p_screenshot'
 alias p_repo='_p_find_repo'
 alias find_repo='_p_find_repo'
+alias p_ip_local='_p_get_local_ip'
+alias p_ip_remote='echo ${CONSOLE_IP}'
+alias p_ip_list='_p_ip_list'
+alias p_ip='p_ip_list'
+alias p_resize_snaps='_p_resize_snaps_by_50'
 
+# VERY SHORT
+alias pss='_p_screenshot'
+alias pk='p_kill_shell; sh_say "Sir, your shell has been invigorated."'
+
+_p_resize_snaps_by_50() {
+  P_SS_PATH=~/Pictures/SCE/Prospero
+  cd $P_SS_PATH
+  for sourceFileName in *.png; do
+    destFileName="resized/resz_$sourceFileName"
+    if [ ! -f $destFileName ]; then
+      echo_yellow "resizing: $sourceFileName"
+      convert $sourceFileName -resize 50% $destFileName
+    fi
+  done
+  echo_green "done resizing screenshots"
+}
 _p_screenshot() {
   SS_NAME=$(date -u +'%Y-%m-%d_%H%M%S')
   SS_PATH=$CODE_FOLDER_P/screenshots/$SS_NAME.png
@@ -75,8 +97,18 @@ _p_info_formatted() {
   _p_cli get info | sed -e "s/'/\"/g" | jq
 }
 _p_manifest_formatted() {
-  echo "asking for manifest..."
+  echo "asking for manifest url..."
   _p_cli get manifest-url | sed -e "s/.*= //g"
+}
+_p_manifest_contents_formatted() {
+  echo "asking for manifest url..."
+  FULL_MAN_URL=$(_p_cli get manifest-url | sed -e "s/.*= //g")
+  MAN_URL=$(echo $FULL_MAN_URL | sed -e "s/mhttp/http/")
+  curl $MAN_URL | jq
+
+  echo
+  echo "From"
+  echo_yellow $FULL_MAN_URL
 }
 _p_user_formatted() {
   # this is sweet shell magic
@@ -151,4 +183,13 @@ _find_repo() {
   fi
 
   echo $REPO_URL
+}
+_p_get_local_ip() {
+  ifconfig | grep " --> " | cut -c 7-21
+}
+_p_ip_list() {
+  echo_yellow "LOCAL IP:"
+  _p_get_local_ip
+  echo_yellow "REMOTE IP:"
+  echo $CONSOLE_IP
 }

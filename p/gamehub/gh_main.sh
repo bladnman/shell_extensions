@@ -34,20 +34,63 @@ alias gh_link_product='_gh__link_product_gamehub'
 alias gh_link_title='_gh__link_title_gamehub'
 alias gh_link='_gh__link_any_gamehub'
 alias gh_tc='pytest --udid=$CONSOLE_IP -m '
+
 alias gh_qa_tc='pytest --udid=$CONSOLE_IP -m '
-alias gh_qa_prep='_gh__qa_prepare'
-alias gh_qa_build_push='_gh__build_and_push_for_qa'
-alias gh_build_and_push='. ${SCRIPT_DIR_GH}/scripts/gh_qa_stage_branch.sh '
+alias gh_qa_prep='_gh__qa_prepare; snotif'
+alias gh_stage_branch='. ${SCRIPT_DIR_GH}/scripts/gh_qa_stage_branch.sh -s=$CODE_FOLDER_ROOT_GH -i=$CONSOLE_IP -d=/data/rnps/gamehub-branch/ -m=mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__device-branch; snotif '
+alias gh_stage_master='gh_stage_branch -b=master -d=/data/rnps/gamehub-mast/ -m=mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__device-mast; snotif '
+
+alias gh_man_master='_p_manifest_named game-hub__device-mast; p_kill_shell; snotif'
+alias gh_man_branch='_p_manifest_named game-hub__device-branch; p_kill_shell; snotif'
+alias gh_man_dev='_p_manifest_named game-hub__dev; p_kill_shell; snotif'
+alias gh_man_clear='_p_manifest_named game-hub__clear; p_kill_shell; snotif'
 
 # short-short-handers
-alias smoke='_gh__run_e2e_smoke'
-alias tc='_gh__run_e2e_tc'
+alias smoke='_gh__run_e2e_smoke; snotif'
+alias tc='_gh__run_e2e_tc; snotif'
+alias ts='_gh__qa_run_test_suite_named; snotif'
 alias ghs='gh_serve'
 alias ghl='gh_link'
+alias stage_branch='_gh__do_stage_branch'
+alias stage_master='_gh__do_stage_master'
+alias sb='stage_branch'
+alias sm='stage_master'
+alias man_master='_p_manifest_named game-hub__device-mast; p_kill_shell; snotif'
+alias man_branch='_p_manifest_named game-hub__device-branch; p_kill_shell; snotif'
+alias man_dev='_p_manifest_named game-hub__dev; p_kill_shell; snotif'
+alias man_clear='_p_manifest_named game-hub__clear; p_kill_shell; snotif'
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS
 # -=-=-=-=-=-=-=-=-=-=-=-=
+_gh__do_stage_branch() {
+  . ${SCRIPT_DIR_GH}/scripts/gh_qa_stage_branch.sh -b=$1 -s=$CODE_FOLDER_ROOT_GH -i=$CONSOLE_IP -d=/data/rnps/gamehub-branch/ -m=mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__device-branch
+  sh_say "Sir, your branch has been staged."
+}
+_gh__do_stage_master() {
+  . ${SCRIPT_DIR_GH}/scripts/gh_qa_stage_branch.sh -b=master -s=$CODE_FOLDER_ROOT_GH -i=$CONSOLE_IP -d=/data/rnps/gamehub-mast/ -m=mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__device-mast
+  sh_say "Sir, master has been staged."
+}
+_gh__qa_run_test_suite_named() {
+  SUITE_NAME="${1:-Matt-Manual}"
+
+  # need to be in the gh test root folder
+  cd $TEST_E2E_FOLDER
+
+  pytest --udid=$CONSOLE_IP --suite=$SUITE_NAME --qtest-enable .
+}
+_gh__qa_stage() {
+  ALL_ARGS=$@
+  . ${SCRIPT_DIR_GH}/scripts/gh_qa_stage_branch.sh -s=$CODE_FOLDER_ROOT_GH -i=$CONSOLE_IP -d=/data/rnps/gamehub-bun/ -m=mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__device-bun $@
+}
+_gh__qa_stage_branch() {
+  if [[ ! $@ =~ "-b=" && ! $@ =~ "-branch=" ]]; then
+    echo_red "You must indicate a branch with -b=<branch_name>"
+    false
+    return
+  fi
+  . ${SCRIPT_DIR_GH}/scripts/gh_qa_stage_branch.sh $@
+}
 _gh__link_concept_gamehub() {
   echo p_cli execute shellui "openuri psgamehub:main?conceptId=$@"
   p_cli execute shellui "openuri psgamehub:main?conceptId=$@"
@@ -59,37 +102,6 @@ _gh__link_product_gamehub() {
 _gh__link_title_gamehub() {
   echo p_cli execute shellui "openuri psgamehub:main?titleId=$@"
   p_cli execute shellui "openuri psgamehub:main?titleId=$@"
-}
-_gh__build_and_push_for_qa() {
-
-  echo
-  echo
-  echo "+-----------------"
-  echo "Moving into GameHub root folder, updating and building..."
-  cd $CODE_FOLDER_ROOT_GH
-
-  echo
-  echo
-  echo "+-----------------"
-  echo "Updating..."
-  yarn
-
-  echo
-  echo
-  echo "+-----------------"
-  echo "Building (please wait)..."
-  npm run ci:build
-
-  echo
-  echo
-  echo "+-----------------"
-  echo "Pushing to console (please wait)..."
-  p_cli upload --host-path=./bundles --target-path=/data/rnps/gamehub-bun/ --is-directory
-
-  echo
-  echo
-  echo "+-----------------"
-  echo "Done. Published to /data/rnps/gamehub-bun/"
 }
 _gh__run_e2e_tc() {
   PARAM=$1
@@ -145,23 +157,22 @@ _gh__serve_all_gamehub() {
   wait
 }
 _gh__qa_prepare() {
-  echo "Getting you ready for QA"
+  echo_blue "Getting you ready for QA"
 
-  echo "1. Create Virtual Environment"
+  echo_blue "1. Create Virtual Environment"
   cd $SKYNETE_CHECKOUT_FOLDER
   python3 -m venv Skynete
   source ./Skynete/bin/activate
 
-  echo "2. Install GH QA Dependancies (longer)"
+  echo_blue "2. Install GH QA Dependancies (longer)"
   cd $TEST_E2E_FOLDER
   pip install -r requirements.txt
 
   clear
   echo
-  echo
   echo "Done."
-  echo "You can now execute test cases against your devkit. Example"
-  echo "   > gh_qa_tc tc85"
+  echo "You can now execute test cases like so:"
+  echo_yellow "   > tc tc85"
   echo
 }
 _gh__setup_env() {
