@@ -34,35 +34,89 @@ alias gh_link_product='_gh__link_product_gamehub'
 alias gh_link_title='_gh__link_title_gamehub'
 alias gh_link='_gh__link_any_gamehub'
 alias gh_tc='pytest --udid=$CONSOLE_IP -m '
+alias gh_verify='_gh_verify_flow && _gh_verify_lint && _gh_verify_tests && ssay "Smashing job. Everything looks good sir."'
+alias gh_lint='_gh_verify_lint && ssay "Looks correct sir"'
+alias gh_flow='_gh_verify_flow && ssay "Your flow looks proper sir"'
+alias gh_tests='_gh_verify_tests && ssay "Perfect marks sir"'
 
 alias gh_qa_tc='pytest --udid=$CONSOLE_IP -m '
 alias gh_qa_prep='_gh__qa_prepare; snotif'
-alias gh_stage_branch='. ${SCRIPT_DIR_GH}/scripts/gh_qa_stage_branch.sh -s=$CODE_FOLDER_ROOT_GH -i=$CONSOLE_IP -d=/data/rnps/gamehub-branch/ -m=mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__device-branch; snotif '
-alias gh_stage_master='gh_stage_branch -b=master -d=/data/rnps/gamehub-mast/ -m=mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__device-mast; snotif '
+alias gh_stage_branch='_gh__do_stage_branch'
+alias gh_stage_master='_gh__do_stage_master'
 
-alias gh_man_master='_p_manifest_named game-hub__device-mast; p_kill_shell; snotif'
-alias gh_man_branch='_p_manifest_named game-hub__device-branch; p_kill_shell; snotif'
-alias gh_man_dev='_p_manifest_named game-hub__dev; p_kill_shell; snotif'
-alias gh_man_clear='_p_manifest_named game-hub__clear; p_kill_shell; snotif'
+alias gh_man_master='_gh__switch_manifest game-hub__device-mast "Now using on board master manifest, sir"'
+alias gh_man_branch='_gh__switch_manifest game-hub__device-branch "Now using on board branch manifest, sir"'
+alias gh_man_dev='_gh__switch_manifest "game-hub__dev" "Dev manifest enabled, sir"'
+alias gh_man_clear='_gh__switch_manifest game-hub__clear "Clear manifest installed, sir"'
 
 # short-short-handers
+alias stage_branch='gh_stage_branch'
+alias stage_master='gh_stage_master'
+alias stb='gh_stage_branch'
+alias stm='gh_stage_master'
 alias smoke='_gh__run_e2e_smoke; snotif'
 alias tc='_gh__run_e2e_tc; snotif'
 alias ts='_gh__qa_run_test_suite_named; snotif'
 alias ghs='gh_serve'
 alias ghl='gh_link'
-alias stage_branch='_gh__do_stage_branch'
-alias stage_master='_gh__do_stage_master'
-alias sb='stage_branch'
-alias sm='stage_master'
-alias man_master='_p_manifest_named game-hub__device-mast; p_kill_shell; snotif'
-alias man_branch='_p_manifest_named game-hub__device-branch; p_kill_shell; snotif'
-alias man_dev='_p_manifest_named game-hub__dev; p_kill_shell; snotif'
-alias man_clear='_p_manifest_named game-hub__clear; p_kill_shell; snotif'
+alias ghv='gh_verify'
+alias man_master='gh_man_master'
+alias man_branch='gh_man_branch'
+alias man_dev='gh_man_dev'
+alias man_clear='gh_man_clear'
+alias mnm='gh_man_master'
+alias mnb='gh_man_branch'
+alias mnd='gh_man_dev'
+alias mnc='gh_man_clear'
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS
 # -=-=-=-=-=-=-=-=-=-=-=-=
+_gh_verify_flow() {
+  cd $CODE_FOLDER_GH
+
+  # FLOW CHECK
+  echo_blue "Checking Flow ..."
+  yarn run flow
+  RESULT=$?
+  if [ $RESULT -ne 0 ]; then
+    echo_red "Problem with Flow"
+    ssay "There seems to be a Flow problem sir."
+    false
+  else
+    true
+  fi
+}
+_gh_verify_lint() {
+  cd $CODE_FOLDER_GH
+
+  # FLOW CHECK
+  echo_blue "Checking Lint ..."
+  yarn lint
+  RESULT=$?
+  if [ $RESULT -ne 0 ]; then
+    echo_red "Problem with Lint"
+    ssay "I believe I see some lint sir."
+    false
+  else
+    true
+  fi
+}
+_gh_verify_tests() {
+  cd $CODE_FOLDER_GH
+
+  # FLOW CHECK
+  echo_blue "Checking Unit Tests ..."
+  yarn test
+  RESULT=$?
+  if [ $RESULT -ne 0 ]; then
+    echo_red "Problem with Unit Tests"
+    ssay "Sir, I think we have a unit test failing around here somewhere."
+    false
+  else
+    true
+  fi
+}
 _gh__do_stage_branch() {
   . ${SCRIPT_DIR_GH}/scripts/gh_qa_stage_branch.sh -b=$1 -s=$CODE_FOLDER_ROOT_GH -i=$CONSOLE_IP -d=/data/rnps/gamehub-branch/ -m=mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__device-branch
   sh_say "Sir, your branch has been staged."
@@ -70,6 +124,23 @@ _gh__do_stage_branch() {
 _gh__do_stage_master() {
   . ${SCRIPT_DIR_GH}/scripts/gh_qa_stage_branch.sh -b=master -s=$CODE_FOLDER_ROOT_GH -i=$CONSOLE_IP -d=/data/rnps/gamehub-mast/ -m=mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__device-mast
   sh_say "Sir, master has been staged."
+}
+_gh__switch_manifest() {
+  MANIFEST_NAME=$1
+  SUCCESS_MESSAGE=$2
+
+  _p_manifest_named $MANIFEST_NAME
+  RESULT=$?
+  if [ $RESULT -eq 0 ]; then
+    p_kill_shell
+    if [ -z "$SUCCESS_MESSAGE" ]; then
+      ssay "Sir, your manifest was switched."
+    else
+      ssay $SUCCESS_MESSAGE
+    fi
+  else
+    snotif
+  fi
 }
 _gh__qa_run_test_suite_named() {
   SUITE_NAME="${1:-Matt-Manual}"
@@ -187,127 +258,4 @@ _gh__setup_env() {
     cd $CODE_FOLDER_GH
     yarn start
   fi
-}
-_gh__qa_checkout_build_and_push() {
-  # function that will
-  #   - take in a branch name
-  #   - go to GH repo root folder
-  #   - checkout that branch
-  #   - yarn && build
-  #   - push to console
-  #   - set console manifest to QA
-  # These steps are preceded by a few git
-  # checks to mnke sure there are no changes in
-  # current env... thus, safe to checkout
-  # NOTE:
-  #   git commands require functions set up
-  #   by other shell_extention scripts
-  #   (git_main.sh at the moment)
-
-  # where should all of this end up on the console?
-  CONSOLE_QA_GH_PATH=/data/rnps/gamehub-bun/
-
-  # must send a branch name to us
-  BRANCH=$1
-
-  # use a little bash magic var
-  START_TIME=$SECONDS
-
-  echo
-  echo
-  echo_blue "➡️ GameHub : Checkout : Build : Push (starting)"
-  echo
-  echo_blue "  - - - - - - -"
-  echo_blue "∙ Moving to GameHub root directory ..."
-  echo
-  cd $CODE_FOLDER_ROOT_GH
-
-  # bail - not a git repo
-  if [[ -z $BRANCH ]]; then
-    echo_error "❌ You must send a branch name to checkout"
-    return
-  fi
-
-  # bail - not a git repo
-  if _git__isnot_git_tree; then
-    echo "Current folder contains no git repo"
-    return
-  fi
-
-  # bail - changes in this git tree
-  if _git__has_changes; then
-    echo_error "❌ There are unhandled changes in this git tree."
-    echo "This command only works on a clean tree."
-    return
-  fi
-
-  # checkout
-  echo
-  echo_blue "  - - - - - - -"
-  echo_blue "∙ Checking out branch [${BRANCH}] ..."
-  echo
-  git checkout $BRANCH
-
-  # validate we got the right one
-  if [[ $BRANCH != $(_git__current_branch_name) ]]; then
-    echo $BRANCH
-    echo $(_git__current_branch_name)
-    echo_error "❌ It seems like our checkout did not work"
-    echo "Possible that you asked for a branch that does not exist?"
-    return
-  fi
-
-  # pull
-  echo
-  echo_blue "  - - - - - - -"
-  echo_blue "∙ git pull'ing ..."
-  echo
-  git pull
-
-  # updating modules
-  echo
-  echo_blue "  - - - - - - -"
-  echo_blue "∙ yarn updating ..."
-  echo
-  yarn
-
-  # building
-  echo
-  echo_blue "  - - - - - - -"
-  echo_blue "∙ building for ci ..."
-  echo
-  npm run ci:build
-
-  echo
-  echo_blue "  - - - - - - -"
-  echo_blue "∙ pushing to console [${CONSOLE_QA_GH_PATH}] ..."
-  echo
-  p_cli upload --host-path=./bundles --target-path=${CONSOLE_QA_GH_PATH} --is-directory
-
-  # moving manifest
-  if _cmd__exists "p_man_qa"; then
-    echo
-    echo_blue "  - - - - - - -"
-    echo_blue "∙ moving manifest to QA manifest ..."
-    echo
-    p_man_qa
-
-    # look for errors
-    if [[ $_ =~ RuntimeError ]]; then
-      echo_error "❌ It looks like setting the manifest did not work"
-      return
-    fi
-
-  else
-    echo
-    echo_yellow "  - - - - - - -"
-    echo_yellow "∙ the $(p_man_qa) command was not found"
-    echo_yellow "∙ make sure your manifest uses the local folder for gamehub"
-  fi
-
-  # COMPLETE : DURATION
-  echo
-  echo_green "  - - - - - - -"
-  ELAPSED_TIME=$(($SECONDS - $START_TIME))
-  echo_green "✅ All done! Completed in $(displaytime $ELAPSED_TIME)"
 }

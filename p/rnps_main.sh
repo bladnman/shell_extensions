@@ -9,12 +9,13 @@ export SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
 
 alias p_cli='prospero-cli $CONSOLE_IP'
 alias p_con='_p_cli get console | sed "/^$/d"'
-alias p_man='_p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub'
-alias p_man_clear='_p_cli set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub-clear'
+alias p_man='p_get_manifest'
+alias p_man_dev='_p_manifest_named game-hub__dev; p_kill_shell; ssay "Manifest moved to dev, sir."'
+alias p_man_gh='p_man_dev'
+alias p_man_qa='_p_manifest_named game-hub__device-branch; p_kill_shell; ssay "Manifest moved to on-board branch, sir."'
+alias p_man_mast='_p_manifest_named game-hub__device-mast; p_kill_shell; ssay "Manifest moved to on-board master, sir."'
+alias p_man_clear='_p_manifest_named game-hub__clear; p_kill_shell; ssay "Now running with a clear manifest, sir."'
 alias p_man_named='_p_manifest_named'
-alias p_man_local_named='_p_manifest_local_named'
-alias p_man_gh='_p_manifest_named game-hub; p_kill_shell'
-alias p_man_qa='_p_manifest_named game-hub-qa; p_kill_shell'
 alias p_create_sample='_p_create_sample'
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
 alias p_kill_shell='_p_cli kill SceShellUI'
@@ -37,6 +38,8 @@ alias p_ip_remote='echo ${CONSOLE_IP}'
 alias p_ip_list='_p_ip_list'
 alias p_ip='p_ip_list'
 alias p_resize_snaps='_p_resize_snaps_by_50'
+
+alias uip='_p_ip_update'
 
 # VERY SHORT
 alias pss='_p_screenshot'
@@ -91,7 +94,8 @@ _p_screenshot() {
   fi
 }
 _p_cli() {
-  prospero-cli $CONSOLE_IP $@
+  # prospero-cli $CONSOLE_IP $@
+  prospero-cli-mac $CONSOLE_IP $@
 }
 _p_info_formatted() {
   _p_cli get info | sed -e "s/'/\"/g" | jq
@@ -120,9 +124,6 @@ _p_extended_info_formatted() {
 }
 _p_manifest_named() {
   prospero-cli $CONSOLE_IP set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/$1
-}
-_p_manifest_local_named() {
-  prospero-cli $CONSOLE_IP set manifest-url mhttp://$CONSOLE_IP.am.sony.com:8080/u/mmaher/$1
 }
 _p_create_sample() {
   APP_NAME=$1
@@ -185,11 +186,29 @@ _find_repo() {
   echo $REPO_URL
 }
 _p_get_local_ip() {
-  ifconfig | grep " --> " | cut -c 7-21
+  ifconfig | grep " 10\." | grep " --> " | cut -c 7-21
 }
 _p_ip_list() {
+  echo_yellow "CONSOLE IP:"
+  echo $CONSOLE_IP
   echo_yellow "LOCAL IP:"
   _p_get_local_ip
-  echo_yellow "REMOTE IP:"
-  echo $CONSOLE_IP
+}
+_p_ip_update() {
+
+  # check if on VPN yet
+  if _p_get_local_ip | grep -q 10; then
+    echo "VPN Found"
+    _p_ip_list
+    echo
+    echo_yellow "UPDATE IP AT:"
+    echo "https://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__dev/edit"
+    ssay "Nearly done sir"
+    true
+  else
+    echo_yellow "Couldn't find the correct local IP"
+    echo_red "You may not be on VPN"
+    ssay "You may not be on VPN sir"
+    false
+  fi
 }
