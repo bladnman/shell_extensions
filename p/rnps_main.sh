@@ -1,4 +1,5 @@
 CONSOLE_IP='10.125.43.243'
+# CONSOLE_IP='mmaher-gh'
 MACHINE_NAME='us38f9d32262b1'
 CODE_FOLDER_P=~/code/p
 SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
@@ -38,10 +39,11 @@ alias p_ip_remote='echo ${CONSOLE_IP}'
 alias p_ip_list='_p_ip_list'
 alias p_ip='p_ip_list'
 alias p_resize_snaps='_p_resize_snaps_by_50'
-
-alias uip='_p_ip_update'
+alias p_pkg_install='_p_pkg_install'
+alias p_pup_install='_p_pup_install'
 
 # VERY SHORT
+alias uip='_p_ip_update'
 alias pss='_p_screenshot'
 alias pk='p_kill_shell; sh_say "Sir, your shell has been invigorated."'
 
@@ -120,7 +122,9 @@ _p_user_formatted() {
 }
 _p_extended_info_formatted() {
   # this is sweet shell magic
-  _p_cli get extended | awk '{printf "%s+",$0} END {print ""}' | sed -e "s/^.*{/{/" | sed -e "s/}.*$/}/" | sed -e "s/'/\"/g" | jq
+  # _p_cli get extended | awk '{printf "%s+",$0} END {print ""}' | sed -e "s/^.*{/{/" | sed -e "s/}.*$/}/" | sed -e "s/'/\"/g" | jq
+
+  _p_cli get extended | sed -e "s/Devi.* is {/{/" | sed -e "s/^.*{/{/" | sed -e "s/}.*$/}/" | sed -e "s/'/\"/g" | jq
 }
 _p_manifest_named() {
   prospero-cli $CONSOLE_IP set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/$1
@@ -211,4 +215,10 @@ _p_ip_update() {
     ssay "You may not be on VPN sir"
     false
   fi
+}
+_p_pkg_install() {
+  _p_cli install package $@
+}
+_p_pup_install() {
+  _p_cli update --pup-file $@
 }

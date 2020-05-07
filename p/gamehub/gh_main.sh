@@ -49,6 +49,8 @@ alias gh_man_branch='_gh__switch_manifest game-hub__device-branch "Now using on 
 alias gh_man_dev='_gh__switch_manifest "game-hub__dev" "Dev manifest enabled, sir"'
 alias gh_man_clear='_gh__switch_manifest game-hub__clear "Clear manifest installed, sir"'
 
+alias gh_grim='cd ~/code/p/grimoire-browser; yarn start'
+
 # short-short-handers
 alias stage_branch='gh_stage_branch'
 alias stage_master='gh_stage_master'
@@ -59,6 +61,7 @@ alias tc='_gh__run_e2e_tc; snotif'
 alias ts='_gh__qa_run_test_suite_named; snotif'
 alias ghs='gh_serve'
 alias ghl='gh_link'
+alias ghkl='_gh_kill_and_link'
 alias ghv='gh_verify'
 alias man_master='gh_man_master'
 alias man_branch='gh_man_branch'
@@ -68,10 +71,19 @@ alias mnm='gh_man_master'
 alias mnb='gh_man_branch'
 alias mnd='gh_man_dev'
 alias mnc='gh_man_clear'
+alias grim='gh_grim'
+alias kl='ghkl'
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS
 # -=-=-=-=-=-=-=-=-=-=-=-=
+_gh_kill_and_link() {
+  TO_LINK=$1
+  p_kill_shell
+  sleep 8
+  ssay "reborn sir"
+  _gh__link_any_gamehub $TO_LINK
+}
 _gh_verify_flow() {
   cd $CODE_FOLDER_GH
 
