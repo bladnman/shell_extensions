@@ -1,3 +1,19 @@
+##
+##  NOTE:
+##  NAMES WILL COLLIDE WITH OTHER SCRIPTS
+##  take care to add this project's name to the
+##  end of everything. SelectAll/Replace makes
+##  it easy.
+##
+
+# -=-+-=-+-=-+-=-+
+# -= ENV VARS
+# -=-+-=-+-=-+-=-+
+SCRIPT_DIR_P=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
+SCRIPT_FULL_PATH_P="$SCRIPT_DIR_P/$(basename -- "$0")"
+
+##
+# CONFIG VALUES
 CONSOLE_IP='10.125.43.243'
 # CONSOLE_IP='mmaher-gh'
 MACHINE_NAME='us38f9d32262b1'
@@ -19,7 +35,8 @@ alias p_man_clear='_p_manifest_named game-hub__clear; p_kill_shell; ssay "Now ru
 alias p_man_named='_p_manifest_named'
 alias p_create_sample='_p_create_sample'
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
-alias p_kill_shell='p_disco; _p_cli kill SceShellUI'
+alias p_kill_shell='echo_blue "Killing Shell"; _p_cli kill SceShellUI'
+alias p_kill_shell_disco='p_disco; _p_cli kill SceShellUI'
 alias p_disco='_p_cli force-disconnect'
 alias p_get_info="_p_info_formatted"
 alias p_get_extended="_p_extended_info_formatted"
@@ -211,13 +228,35 @@ _p_ip_update() {
     echo "https://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__dev/edit"
     # open the browser
     open "https://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__dev/edit"
-    ssay "Nearly done sir"
+    ssay "Awaiting command sir"
+    echo
+
+    # read -p 'Should I KILL SHELL? y/n' answer
+    # zsh specific read parameters
+    # http://zsh.sourceforge.net/Doc/Release/Shell-Builtin-Commands.html
+    read -q "?Should I KILL SHELL y/[n]? " answer
+    if [[ "$answer" =~ ^[Yy]$ ]]; then
+      echo
+      ssay "On it sir"
+      p_kill_shell
+    fi
+
     true
   else
     echo_yellow "Couldn't find the correct local IP"
     echo_red "You may not be on VPN"
     ssay "You may not be on VPN sir"
     false
+  fi
+}
+testIt() {
+  # zsh specific read parameters
+  # http://zsh.sourceforge.net/Doc/Release/Shell-Builtin-Commands.html
+  read -q "?Should I KILL SHELL y/[n]? " answer
+  if [[ "$answer" =~ ^[Yy]$ ]]; then
+    echo
+    ssay "On it sir"
+    p_kill_shell
   fi
 }
 _p_pkg_install() {
