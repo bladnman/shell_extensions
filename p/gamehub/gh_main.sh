@@ -32,7 +32,8 @@ alias gh_serve='_gh__setup_env -serve'
 alias gh_link_concept='_gh__link_concept_gamehub'
 alias gh_link_product='_gh__link_product_gamehub'
 alias gh_link_title='_gh__link_title_gamehub'
-alias gh_link='_gh__link_any_gamehub'
+alias gh_link='p_disco; _gh__link_any_gamehub'
+alias gh_plink='_gh__plink_any_gamehub'
 alias gh_tc='pytest --udid=$CONSOLE_IP -m '
 alias gh_verify='_gh_verify_flow && _gh_verify_lint && _gh_verify_tests && ssay "Smashing job. Everything looks good sir."'
 alias gh_lint='_gh_verify_lint && ssay "Looks correct sir"'
@@ -61,12 +62,13 @@ alias tc='_gh__run_e2e_tc; snotif'
 alias ts='_gh__qa_run_test_suite_named; snotif'
 alias ghs='gh_serve'
 alias ghl='gh_link'
+alias ghlp='_gh__plink_any_gamehub'
 alias ghkl='_gh_kill_and_link'
 alias ghv='gh_verify'
-alias man_master='gh_man_master'
-alias man_branch='gh_man_branch'
-alias man_dev='gh_man_dev'
-alias man_clear='gh_man_clear'
+alias man_master='p_disco; gh_man_master; p_kill_shell; ssay "Ready sir"'
+alias man_branch='p_disco; gh_man_branch; p_kill_shell; ssay "Ready sir"'
+alias man_dev='p_disco; gh_man_dev; p_kill_shell; ssay "Ready sir"'
+alias man_clear='p_disco; gh_man_clear; p_kill_shell; ssay "Ready sir"'
 alias mnm='gh_man_master'
 alias mnb='gh_man_branch'
 alias mnd='gh_man_dev'
@@ -175,8 +177,15 @@ _gh__qa_stage_branch() {
   . ${SCRIPT_DIR_GH}/scripts/gh_qa_stage_branch.sh $@
 }
 _gh__link_concept_gamehub() {
-  echo p_cli execute shellui "openuri psgamehub:main?conceptId=$@"
-  p_cli execute shellui "openuri psgamehub:main?conceptId=$@"
+  TYPE='conceptId'
+  ID=$1
+  ISPREV=''
+  if [[ $2 == 'TRUE' ]]; then
+    ISPREV='&previewMode=true'
+  fi
+  CMD="openuri psgamehub:main?$TYPE$ID$ISPREV"
+  echo p_cli execute shellui $CMD
+  # p_cli execute shellui $CMD
 }
 _gh__link_product_gamehub() {
   echo p_cli execute shellui "openuri psgamehub:main?productId=$@"
@@ -206,15 +215,35 @@ _gh__run_e2e_smoke() {
 }
 _gh__link_any_gamehub() {
   ID=$1
+  ISPREV=$2
+  TYPE='conceptId'
   if [[ $1 == '' ]]; then
     echo "https://github.sie.sony.com/SIE-Private/rnps-game-hub/blob/master/packages/gamehub-deeplink-example/src/application/items.js"
   elif [[ $1 =~ [\-] ]]; then
-    _gh__link_product_gamehub $1
+    TYPE='productId'
   elif [[ $1 =~ [a-zA-Z] ]]; then
-    _gh__link_title_gamehub $1
+    TYPE='titleId'
   else
-    _gh__link_concept_gamehub $1
+    TYPE='conceptId'
   fi
+
+  # example:
+  # p_cli execute shellui "openuri pshome:gamehub?conceptId=10001483"
+  # p_cli execute shellui "openuri pshome:gamehub?conceptId=10001483"
+  # p_cli execute shellui openuri pshome:gamehub?conceptId=10001483
+  # p_cli execute shellui "openuri psgamehub:main?productId=$@"
+
+  # add PREVIEW
+  if [[ $ISPREV == 'TRUE' ]]; then
+    echo p_cli execute shellui "openuri pshome:gamehub?$TYPE=$ID&previewMode=true"
+    p_cli execute shellui "openuri pshome:gamehub?$TYPE=$ID&previewMode=true"
+  else
+    echo p_cli execute shellui "openuri pshome:gamehub?$TYPE=$ID"
+    p_cli execute shellui "openuri pshome:gamehub?$TYPE=$ID"
+  fi
+}
+_gh__plink_any_gamehub() {
+  _gh__link_any_gamehub $@ 'TRUE'
 }
 _gh__serve_manifest_gamehub() {
   cd $MANIFEST_FOLDER_GH

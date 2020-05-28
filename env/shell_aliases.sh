@@ -33,7 +33,11 @@ _sh_say() {
 _sh_notify() {
   if [[ $? = 0 ]]; then
     _sh_say "Sir. Job done."
+    true
+    return
   else
     _sh_say "I'm sorry sir."
+    false
+    return
   fi
 }

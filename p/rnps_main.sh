@@ -19,7 +19,7 @@ alias p_man_clear='_p_manifest_named game-hub__clear; p_kill_shell; ssay "Now ru
 alias p_man_named='_p_manifest_named'
 alias p_create_sample='_p_create_sample'
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
-alias p_kill_shell='_p_cli kill SceShellUI'
+alias p_kill_shell='p_disco; _p_cli kill SceShellUI'
 alias p_disco='_p_cli force-disconnect'
 alias p_get_info="_p_info_formatted"
 alias p_get_extended="_p_extended_info_formatted"
@@ -190,7 +190,7 @@ _find_repo() {
   echo $REPO_URL
 }
 _p_get_local_ip() {
-  ifconfig | grep " 10\." | grep " --> " | cut -c 7-21
+  ifconfig | grep " 10\." | grep " --> " | cut -c 7-21 | sed 's/[^0-9.]*//g'
 }
 _p_ip_list() {
   echo_yellow "CONSOLE IP:"
@@ -204,9 +204,13 @@ _p_ip_update() {
   if _p_get_local_ip | grep -q 10; then
     echo "VPN Found"
     _p_ip_list
+    # get local IP on clipboard
+    _p_get_local_ip | pbcopy
     echo
     echo_yellow "UPDATE IP AT:"
     echo "https://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__dev/edit"
+    # open the browser
+    open "https://urlconfig.rancher.sie.sony.com/u/mmaher/game-hub__dev/edit"
     ssay "Nearly done sir"
     true
   else
