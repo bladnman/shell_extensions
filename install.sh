@@ -37,6 +37,7 @@ export SHELL_EXT_FOLDER
 . $SHELL_EXT_FOLDER/p/rnps_main.sh
 . $SHELL_EXT_FOLDER/p/gamehub/gh_main.sh
 
+. $SHELL_EXT_FOLDER/wallpaper/wallpaper.sh
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  BE HAPPY

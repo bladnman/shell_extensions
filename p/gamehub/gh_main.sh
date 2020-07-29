@@ -32,7 +32,7 @@ alias gh_serve='_gh__setup_env -serve'
 alias gh_link_concept='_gh__link_concept_gamehub'
 alias gh_link_product='_gh__link_product_gamehub'
 alias gh_link_title='_gh__link_title_gamehub'
-alias gh_link='p_disco; _gh__link_any_gamehub'
+alias gh_link='_gh__link_any_gamehub'
 alias gh_plink='_gh__plink_any_gamehub'
 alias gh_tc='pytest --udid=$CONSOLE_IP -m '
 alias gh_verify='_gh_verify_flow && _gh_verify_lint && _gh_verify_tests && ssay "Smashing job. Everything looks good sir."'
@@ -58,17 +58,18 @@ alias stage_master='gh_stage_master'
 alias stb='gh_stage_branch'
 alias stm='gh_stage_master'
 alias smoke='_gh__run_e2e_smoke; snotif'
-alias tc='_gh__run_e2e_tc; snotif'
+alias tc='_gh__run_e2e_tc'
 alias ts='_gh__qa_run_test_suite_named; snotif'
 alias ghs='gh_serve'
+alias ghsb='gh_serve &'
 alias ghl='gh_link'
 alias ghlp='_gh__plink_any_gamehub'
 alias ghkl='_gh_kill_and_link'
 alias ghv='gh_verify'
-alias man_master='p_disco; gh_man_master; p_kill_shell; ssay "Ready sir"'
-alias man_branch='p_disco; gh_man_branch; p_kill_shell; ssay "Ready sir"'
-alias man_dev='p_disco; gh_man_dev; p_kill_shell; ssay "Ready sir"'
-alias man_clear='p_disco; gh_man_clear; p_kill_shell; ssay "Ready sir"'
+alias man_master='p_disco; gh_man_master; ssay "Ready sir"'
+alias man_branch='p_disco; gh_man_branch; ssay "Ready sir"'
+alias man_dev='p_disco; gh_man_dev; ssay "Ready sir"'
+alias man_clear='p_disco; gh_man_clear; ssay "Ready sir"'
 alias mnm='gh_man_master'
 alias mnb='gh_man_branch'
 alias mnd='gh_man_dev'
@@ -208,6 +209,8 @@ _gh__run_e2e_tc() {
 
   echo pytest --udid=${CONSOLE_IP} -m ${LOWER_PARAM}
   pytest --udid=${CONSOLE_IP} -m ${LOWER_PARAM}
+
+  snotif
 }
 _gh__run_e2e_smoke() {
   echo pytest --udid=${CONSOLE_IP} --suite=Smoke-Manual --qtest-enable tests
@@ -284,7 +287,7 @@ _gh__qa_prepare() {
   echo
   echo "Done."
   echo "You can now execute test cases like so:"
-  echo_yellow "   > tc tc85"
+  echo_yellow "   > tc 85"
   echo
 }
 _gh__setup_env() {

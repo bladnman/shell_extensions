@@ -3,6 +3,8 @@
 ## CONFIG
 ## - - - - - - - -
 
+__PCLI=prospero-cli-mac
+
 # Root repo folder for rnps-game-hub
 # __SOURCE_PATH=~/code/p/rnps-game-hub
 __SOURCE_PATH=
@@ -108,13 +110,13 @@ function _main() {
   __echo_blue "  - - - - - - -"
   __echo_blue "∙ force-disconnection on devkit: give us control ..."
   echo
-  prospero-cli $__CONSOLE_IP force-disconnect
+  $__PCLI $__CONSOLE_IP force-disconnect
 
   echo
   __echo_blue "  - - - - - - -"
   __echo_blue "∙ pushing to console [${__DEST_PATH}] ..."
   echo
-  prospero-cli $__CONSOLE_IP upload --host-path=./bundles --target-path=${__DEST_PATH} --is-directory
+  $__PCLI $__CONSOLE_IP upload --host-path=./bundles --target-path=${__DEST_PATH} --is-directory
 
   # moving manifest
   if [[ ! -z $__MANIFEST_URL ]]; then
@@ -124,10 +126,10 @@ function _main() {
     echo "   ${__MANIFEST_URL}"
     echo
     # set manifest
-    prospero-cli $__CONSOLE_IP set manifest-url $__MANIFEST_URL
+    $__PCLI $__CONSOLE_IP set manifest-url $__MANIFEST_URL
     # restart the shellUI to pick up manifest change
     __echo_blue "∙ restarting SceShellUI ..."
-    prospero-cli $__CONSOLE_IP kill SceShellUI
+    $__PCLI $__CONSOLE_IP kill SceShellUI
 
   else
 

@@ -14,7 +14,8 @@ SCRIPT_FULL_PATH_P="$SCRIPT_DIR_P/$(basename -- "$0")"
 
 ##
 # CONFIG VALUES
-CONSOLE_IP='10.125.43.243'
+# CONSOLE_IP='10.125.43.243'
+CONSOLE_IP='10.125.47.220'
 # CONSOLE_IP='mmaher-gh'
 MACHINE_NAME='us38f9d32262b1'
 CODE_FOLDER_P=~/code/p
@@ -36,8 +37,9 @@ alias p_man_named='_p_manifest_named'
 alias p_create_sample='_p_create_sample'
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
 alias p_kill_shell='echo_blue "Killing Shell"; _p_cli kill SceShellUI'
-alias p_kill_shell_disco='p_disco; _p_cli kill SceShellUI'
-alias p_disco='_p_cli force-disconnect'
+alias p_kill_shell_disco='p_disco; p_kill_shell'
+alias p_kd='p_kill_shell_disco'
+alias p_disco='echo_blue "Disconnecting any user"; _p_cli force-disconnect'
 alias p_get_info="_p_info_formatted"
 alias p_get_extended="_p_extended_info_formatted"
 alias p_get_user='_p_user_formatted'
