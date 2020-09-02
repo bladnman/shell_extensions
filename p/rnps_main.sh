@@ -17,16 +17,19 @@ SCRIPT_FULL_PATH_P="$SCRIPT_DIR_P/$(basename -- "$0")"
 # CONSOLE_IP='mmaher-gh'
 # CONSOLE_IP='10.125.43.243'
 # CONSOLE_IP='10.125.47.220'
-CONSOLE_IP='10.125.53.245'
+# CONSOLE_IP='10.125.53.245'
+CONSOLE_IP='10.32.254.234'
 MACHINE_NAME='us38f9d32262b1'
 CODE_FOLDER_P=~/code/p
 SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
 SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
 MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
 SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
+PCLI_COMMAND=prospero-cli
+# PCLI_COMMAND=prospero-cli-mac
 export SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
 
-alias p_cli='prospero-cli $CONSOLE_IP'
+alias p_cli='$PCLI_COMMAND $CONSOLE_IP'
 alias p_con='_p_cli get console | sed "/^$/d"'
 alias p_man='p_get_manifest'
 alias p_man_dev='_p_manifest_named game-hub__dev; p_kill_shell; ssay "Manifest moved to dev, sir."'
@@ -34,6 +37,7 @@ alias p_man_gh='p_man_dev'
 alias p_man_qa='_p_manifest_named game-hub__device-branch; p_kill_shell; ssay "Manifest moved to on-board branch, sir."'
 alias p_man_mast='_p_manifest_named game-hub__device-mast; p_kill_shell; ssay "Manifest moved to on-board master, sir."'
 alias p_man_clear='_p_manifest_named game-hub__clear; p_kill_shell; ssay "Now running with a clear manifest, sir."'
+alias p_man_thb='_p_manifest_url "https://urlconfig.api.playstation.com/rnps/2.01.00.00/manifest"; p_kill_shell; ssay "Now running with a take-home beta manifest, sir."'
 alias p_man_named='_p_manifest_named'
 alias p_create_sample='_p_create_sample'
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
@@ -61,11 +65,14 @@ alias p_ip='p_ip_list'
 alias p_resize_snaps='_p_resize_snaps_by_50'
 alias p_pkg_install='_p_pkg_install'
 alias p_pup_install='_p_pup_install'
+alias p_pup_latest='_p_pup_latest'
 
 # VERY SHORT
 alias uip='_p_ip_update'
 alias pss='_p_screenshot'
 alias pk='p_kill_shell; sh_say "Sir, your shell has been invigorated."'
+alias ppup='p_pup_latest'
+alias p_pup='p_pup_latest'
 
 _p_resize_snaps_by_50() {
   P_SS_PATH=~/Pictures/SCE/Prospero
@@ -116,8 +123,7 @@ _p_screenshot() {
   fi
 }
 _p_cli() {
-  # prospero-cli $CONSOLE_IP $@
-  prospero-cli-mac $CONSOLE_IP $@
+  $PCLI_COMMAND $CONSOLE_IP $@
 }
 _p_info_formatted() {
   _p_cli get info | sed -e "s/'/\"/g" | jq
@@ -145,6 +151,9 @@ _p_extended_info_formatted() {
   # _p_cli get extended | awk '{printf "%s+",$0} END {print ""}' | sed -e "s/^.*{/{/" | sed -e "s/}.*$/}/" | sed -e "s/'/\"/g" | jq
 
   _p_cli get extended | sed -e "s/Devi.* is {/{/" | sed -e "s/^.*{/{/" | sed -e "s/}.*$/}/" | sed -e "s/'/\"/g" | jq
+}
+_p_manifest_url() {
+  prospero-cli $CONSOLE_IP set manifest-url $1
 }
 _p_manifest_named() {
   prospero-cli $CONSOLE_IP set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/$1
@@ -267,4 +276,7 @@ _p_pkg_install() {
 }
 _p_pup_install() {
   _p_cli update --pup-file $@
+}
+_p_pup_latest() {
+  . ${SCRIPT_DIR_P}/scripts/p_install_pup.sh
 }

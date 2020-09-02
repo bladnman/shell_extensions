@@ -3,7 +3,7 @@
 ## CONFIG
 ## - - - - - - - -
 
-__PCLI=prospero-cli-mac
+__PCLI=prospero-cli
 
 # Root repo folder for rnps-game-hub
 # __SOURCE_PATH=~/code/p/rnps-game-hub

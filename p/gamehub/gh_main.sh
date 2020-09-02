@@ -51,6 +51,7 @@ alias gh_man_dev='_gh__switch_manifest "game-hub__dev" "Dev manifest enabled, si
 alias gh_man_clear='_gh__switch_manifest game-hub__clear "Clear manifest installed, sir"'
 
 alias gh_grim='cd ~/code/p/grimoire-browser; yarn start'
+alias gh_find_used_errors='grep -r "SCE_RNPS_GAME_HUB_ERROR_" $CODE_FOLDER_GH/src --exclude=*rnps_app_game_hub_error.json | grep -o SCE_RNPS_GAME_HUB_ERROR_[^.,\;\ ]* | sort | uniq -c'
 
 # short-short-handers
 alias stage_branch='gh_stage_branch'
