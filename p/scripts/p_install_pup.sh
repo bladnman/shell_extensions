@@ -41,7 +41,10 @@ function _main() {
   __orig_dir=$(pwd)
   cd $__source_path
 
-  local folderName=$(ls -lt --color=none | egrep '^d' | grep pup | head -1 | sed 's/    / /g' | sed 's/   / /g' | sed 's/  / /g' | cut -d " " -f10)
+  # replace " (" with "_(" since we are splitting on spaces
+  local folderName=$(ls -lt --color=none | egrep '^d' | grep pup | head -1 | sed 's/ (/_(/g' | sed 's/    / /g' | sed 's/   / /g' | sed 's/  / /g' | cut -d " " -f10)
+  # then return it to " (" if it's there
+  folderName=$(sed 's/_(/ (/g' <<<$folderName)
   if [ -z $folderName ]; then
     __echo_red "❌ No PUP directory found. Exiting"
     return -1
@@ -82,7 +85,7 @@ function _main() {
   echo
   echo
   __echo_blue "Beginning update:"
-  p_pup_install $pup_file_path
+  p_pup_install "$pup_file_path"
 
   # return to the place we started
   cd $__orig_dir
