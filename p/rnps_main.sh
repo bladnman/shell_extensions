@@ -18,16 +18,17 @@ SCRIPT_FULL_PATH_P="$SCRIPT_DIR_P/$(basename -- "$0")"
 # CONSOLE_IP='10.125.43.243'
 # CONSOLE_IP='10.125.47.220'
 # CONSOLE_IP='10.125.53.245'
-CONSOLE_IP='10.32.254.234'
+# CONSOLE_IP='10.32.254.234'
+CONSOLE_IP='10.32.254.229'
 MACHINE_NAME='us38f9d32262b1'
 CODE_FOLDER_P=~/code/p
 SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
 SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
 MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
-SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
 PCLI_COMMAND=prospero-cli
 # PCLI_COMMAND=prospero-cli-mac
-export SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
+# export SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
+export SKYNET_CREDENTIAL=bladnman+e1qa@gmail.com:bob_is_happy
 
 alias p_cli='$PCLI_COMMAND $CONSOLE_IP'
 alias p_con='_p_cli get console | sed "/^$/d"'
@@ -35,15 +36,21 @@ alias p_man='p_get_manifest'
 alias p_man_dev='_p_manifest_named game-hub__dev; p_kill_shell; ssay "Manifest moved to dev, sir."'
 alias p_man_gh='p_man_dev'
 alias p_man_qa='_p_manifest_named game-hub__device-branch; p_kill_shell; ssay "Manifest moved to on-board branch, sir."'
+alias p_man_qa_auto='_p_manifest_named game-hub-qa-automation; p_kill_shell; ssay "Manifest moved to qa automation, sir."'
 alias p_man_mast='_p_manifest_named game-hub__device-mast; p_kill_shell; ssay "Manifest moved to on-board master, sir."'
 alias p_man_clear='_p_manifest_named game-hub__clear; p_kill_shell; ssay "Now running with a clear manifest, sir."'
 alias p_man_thb='_p_manifest_url "https://urlconfig.api.playstation.com/rnps/2.01.00.00/manifest"; p_kill_shell; ssay "Now running with a take-home beta manifest, sir."'
+alias p_man_mem='_p_manifest_url "https://urlconfig.e1-np.api.playstation.com/rnps/u/lightning/urlconfig.json"; p_kill_shell; ssay "Now running with a memory profile manifest, sir."'
+alias p_man_url='_p_manifest_url'
+
 alias p_man_named='_p_manifest_named'
 alias p_create_sample='_p_create_sample'
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
 alias p_kill_shell='echo_blue "Killing Shell"; _p_cli kill SceShellUI'
 alias p_kill_shell_disco='p_disco; p_kill_shell'
+alias p_id='_p_set_test_ids'
 alias p_kd='p_kill_shell_disco'
+alias ppk='p_kill_shell'
 alias p_disco='echo_blue "Disconnecting any user"; _p_cli force-disconnect'
 alias p_get_info="_p_info_formatted"
 alias p_get_extended="_p_extended_info_formatted"
@@ -89,8 +96,8 @@ _p_resize_snaps_by_50() {
 _p_screenshot() {
   SS_NAME=$(date -u +'%Y-%m-%d_%H%M%S')
   SS_PATH=$CODE_FOLDER_P/screenshots/$SS_NAME.png
-  # IMG_EDITOR="/Applications/Snagit 2020.app/Contents/MacOS/Snagit 2020"
-  IMG_EDITOR="/Applications/Setapp/CleanShot X.app/Contents/MacOS/CleanShot X Setapp"
+  IMG_EDITOR="/Applications/Snagit 2020.app/Contents/MacOS/Snagit 2020"
+  # IMG_EDITOR="/Applications/Setapp/CleanShot X.app/Contents/MacOS/CleanShot X Setapp"
   echo "starting snapshot process:"
   echo "    ${SS_PATH}"
 
@@ -280,4 +287,9 @@ _p_pup_install() {
 }
 _p_pup_latest() {
   . ${SCRIPT_DIR_P}/scripts/p_install_pup.sh
+}
+_p_set_test_ids() {
+
+  # this does not quite work yet...
+  _p_cli execute shellui "utcmd testinfo set --devkit_ip $CONSOLE_IP --test_case_id ${1} --test_session_id ${1} --test_type ${1}"
 }

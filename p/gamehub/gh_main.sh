@@ -19,7 +19,7 @@ MANIFEST_FOLDER_GH=~/code/p/ppr-urlconfig-dev
 CODE_FOLDER_ROOT_GH=~/code/p/rnps-game-hub
 CODE_FOLDER_GH=$CODE_FOLDER_ROOT_GH/packages/game-hub
 TEST_E2E_FOLDER=$CODE_FOLDER_ROOT_GH/tests/e2e
-SKYNETE_CHECKOUT_FOLDER=~/code/p/SkyNete
+SKYNETE_CHECKOUT_FOLDER=~/code/p
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  ALIASES
@@ -52,6 +52,9 @@ alias gh_man_clear='_gh__switch_manifest game-hub__clear "Clear manifest install
 
 alias gh_grim='cd ~/code/p/grimoire-browser; yarn start'
 alias gh_find_used_errors='grep -r "SCE_RNPS_GAME_HUB_ERROR_" $CODE_FOLDER_GH/src --exclude=*rnps_app_game_hub_error.json | grep -o SCE_RNPS_GAME_HUB_ERROR_[^.,\;\ ]* | sort | uniq -c'
+
+alias gh_mem="p_cli execute shellui 'rnps_jsmemstats \"rnps-game-hub (NPXS40033)\"' | grep HeapSize"
+alias ghmem=gh_mem
 
 # short-short-handers
 alias stage_branch='gh_stage_branch'
@@ -279,6 +282,9 @@ _gh__qa_prepare() {
   cd $SKYNETE_CHECKOUT_FOLDER
   python3 -m venv Skynete
   source ./Skynete/bin/activate
+
+  # add our pyenv shims to front again
+  PATH="/Users/mmaher/.pyenv/shims:$PATH"
 
   echo_blue "2. Install GH QA Dependancies (longer)"
   cd $TEST_E2E_FOLDER
