@@ -33,6 +33,7 @@ alias gh_link_concept='_gh__link_concept_gamehub'
 alias gh_link_product='_gh__link_product_gamehub'
 alias gh_link_title='_gh__link_title_gamehub'
 alias gh_link='_gh__link_any_gamehub'
+alias gh_link_ts='_gh__link_title_selector_gamehub'
 alias gh_plink='_gh__plink_any_gamehub'
 alias gh_tc='pytest --udid=$CONSOLE_IP -m '
 alias gh_verify='_gh_verify_flow && _gh_verify_lint && _gh_verify_tests && ssay "Smashing job. Everything looks good sir."'
@@ -41,6 +42,7 @@ alias gh_flow='_gh_verify_flow && ssay "Your flow looks proper sir"'
 alias gh_tests='_gh_verify_tests && ssay "Perfect marks sir"'
 
 alias gh_qa_tc='pytest --udid=$CONSOLE_IP -m '
+alias gh_qa_post_memory_tests='_gh__qa_run_post_memory_tests'
 alias gh_qa_prep='_gh__qa_prepare; snotif'
 alias gh_stage_branch='_gh__do_stage_branch'
 alias gh_stage_master='_gh__do_stage_master'
@@ -67,6 +69,7 @@ alias ts='_gh__qa_run_test_suite_named; snotif'
 alias ghs='gh_serve'
 alias ghsb='gh_serve &'
 alias ghl='gh_link'
+alias ghlts='gh_link_ts'
 alias ghlp='_gh__plink_any_gamehub'
 alias ghkl='_gh_kill_and_link'
 alias ghv='gh_verify'
@@ -252,6 +255,14 @@ _gh__link_any_gamehub() {
 _gh__plink_any_gamehub() {
   _gh__link_any_gamehub $@ 'TRUE'
 }
+_gh__link_title_selector_gamehub() {
+  # arguments:
+  # $1 = titleId,titleId...
+  # $2 = conceptId
+  local MY_CONCEPT_HEX=$(_get_scp_hex_from_conceptid $2)
+  echo p_cli execute shellui "openuri psgamehub:main?displayTitleIds=${1}&localConceptId=cid:scp:${MY_CONCEPT_HEX}"
+  p_cli execute shellui "openuri psgamehub:main?displayTitleIds=${1}&localConceptId=cid:scp:${MY_CONCEPT_HEX}"
+}
 _gh__serve_manifest_gamehub() {
   cd $MANIFEST_FOLDER_GH
   yarn start &
@@ -309,4 +320,8 @@ _gh__setup_env() {
     cd $CODE_FOLDER_GH
     yarn start
   fi
+}
+_gh__qa_run_post_memory_tests() {
+  cd $TEST_E2E_FOLDER
+  pytest --udid=$CONSOLE_IP -m memory_usage_postpurchase
 }

@@ -74,6 +74,10 @@ alias p_pkg_install='_p_pkg_install'
 alias p_pup_install='_p_pup_install'
 alias p_pup_latest='_p_pup_latest'
 
+# SETTINGS
+alias p_set_voice_on='p_cli set setting "/Accessibility/Screen Reader/Enable Screen Reader" 1'
+alias p_set_voice_off='p_cli set setting "/Accessibility/Screen Reader/Enable Screen Reader" 0'
+
 # VERY SHORT
 alias uip='_p_ip_update'
 alias pss='_p_screenshot'
@@ -135,6 +139,7 @@ _p_cli() {
 }
 _p_info_formatted() {
   _p_cli get info | sed -e "s/'/\"/g" | jq
+  # {'CpVersion': '0x1080505', 'CpRevision': 9793, 'TargetUniqueID': '78-c8-81-78-2f-5f', 'DEVSubnetMask': '255.255.255.240', 'SdkVersion': 67108864, 'HwAttributes': '0x20', 'DevkitType': 'DevKit', 'DevkitName': '', 'ExpiryTime': 31536000, 'TscFrequency': '0x5f259b84', 'CurrentOwner': ''}
 }
 _p_manifest_formatted() {
   echo "asking for manifest url..."
@@ -292,4 +297,15 @@ _p_set_test_ids() {
 
   # this does not quite work yet...
   _p_cli execute shellui "utcmd testinfo set --devkit_ip $CONSOLE_IP --test_case_id ${1} --test_session_id ${1} --test_type ${1}"
+}
+_get_scp_hex_from_conceptid() {
+  # call pattern:
+  # MY_HEX=$(_get_scp_hex_from_conceptid $MY_DEC)
+  local FINAL_LEN=16
+  local NUM=$1
+  local HX=$(printf '%x\n' ${NUM})
+  local PAD_NUM=$(expr ${FINAL_LEN} - ${#HX})
+  local PRE=$(printf "%0${PAD_NUM}d")
+  local PAD="${PRE}${HX}"
+  echo $PAD
 }
