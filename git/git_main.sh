@@ -1,6 +1,15 @@
+# -=-+-=-+-=-+-=-+
+# -= ENV VARS
+# -=-+-=-+-=-+-=-+
+SCRIPT_DIR_GIT=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
+SCRIPT_FULL_PATH_GIT="$SCRIPT_DIR_GIT/$(basename -- "$0")"
+
+PATH=/usr/local/bin:$PATH
+
 alias glt_since='_git__log_tickets_since'
 alias glt_since_string='_git__log_tickets_since_string'
 alias gl_since='_git__log_since'
+alias github_init='_git__init'
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS
 # -=-=-=-=-=-=-=-=-=-=-=-=
@@ -71,4 +80,7 @@ _git__log_tickets_since() {
 }
 _git__log_since() {
   git log -i --oneline ...$1
+}
+_git__init() {
+  . ${SCRIPT_DIR_GIT}/git_create_and_upload.sh
 }

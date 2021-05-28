@@ -14,7 +14,7 @@ export SHELL_EXT_FOLDER
 . $SHELL_EXT_FOLDER/env/colors.sh
 . $SHELL_EXT_FOLDER/env/color_echo.sh
 . $SHELL_EXT_FOLDER/env/shell_aliases.sh
-. $SHELL_EXT_FOLDER/env/git_main.sh
+. $SHELL_EXT_FOLDER/git/git_main.sh
 
 . $SHELL_EXT_FOLDER/aliases.sh
 . $SHELL_EXT_FOLDER/aliases_code.sh
