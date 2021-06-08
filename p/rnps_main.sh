@@ -26,6 +26,7 @@ SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
 SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
 MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
 PCLI_COMMAND=prospero-cli
+DEVKIT_IP=$CONSOLE_IP
 # PCLI_COMMAND=prospero-cli-mac
 # export SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
 export SKYNET_CREDENTIAL=bladnman+e1qa@gmail.com:bob_is_happy
@@ -75,8 +76,20 @@ alias p_pup_install='_p_pup_install'
 alias p_pup_latest='_p_pup_latest'
 
 # SETTINGS
-alias p_set_voice_on='p_cli set setting "/Accessibility/Screen Reader/Enable Screen Reader" 1'
-alias p_set_voice_off='p_cli set setting "/Accessibility/Screen Reader/Enable Screen Reader" 0'
+alias p_set_voice_on='_p_setting_set "/Accessibility/Screen Reader/Enable Screen Reader" 1'
+alias p_set_voice_off='_p_setting_set "/Accessibility/Screen Reader/Enable Screen Reader" 0'
+alias p_font_size_small='_p_font_size -1'
+alias p_font_size_normal='_p_font_size 0'
+alias p_font_size_large='_p_font_size 1'
+alias p_font_size_extra_large='_p_font_size 2'
+alias p_font_bold_toggle='_p_font_bold'
+alias p_font_bold_on='_p_font_bold 1'
+alias p_font_bold_off='_p_font_bold 0'
+alias p_online='_p_setting_set "/Network/Internet Connection" 1'
+alias p_offline='_p_setting_set "/Network/Internet Connection" 0'
+alias p_env_e1='_p_set_env e1-np'
+alias p_env_np='_p_set_env np'
+alias p_env_mgmt='_p_set_env mgmt'
 
 # VERY SHORT
 alias uip='_p_ip_update'
@@ -308,4 +321,52 @@ _get_scp_hex_from_conceptid() {
   local PRE=$(printf "%0${PAD_NUM}d")
   local PAD="${PRE}${HX}"
   echo $PAD
+}
+# Set accessibility text size.
+# Example Usage:
+#   normal: `_p_font_size 0`
+#   large: `_p_font_size 1`
+#   very large: `_p_font_size 2`
+_p_font_size() {
+  _p_setting_set "/Accessibility/Display/Text Size" $1
+}
+# Get Devkit Setting
+_p_setting_get() {
+  p_cli get setting $*
+}
+
+# Set Devkit Setting
+_p_setting_set() {
+  p_cli set setting $*
+}
+# Set accessibility font boldness (toggles if no input)
+# example usage:
+#   toggle: `_p_font_bold`
+#   on: `_p_font_bold 1`
+#   off: `_p_font_bold 0`
+_p_font_bold() {
+  BOLD=$(_p_setting_get "/Accessibility/Display/Bold Text")
+  IS_ACTIVE="/Accessibility/Display/Bold Text = 1"
+
+  if [ -z $1 ]; then
+    if [ "$BOLD" = "$IS_ACTIVE" ]; then
+      echo "turning bold off"
+      _p_setting_set "/Accessibility/Display/Bold Text" 0
+    else
+      echo "turning bold on"
+      _p_setting_set "/Accessibility/Display/Bold Text" 1
+    fi
+  else
+    echo "setting bold to $1"
+    _p_setting_set "/Accessibility/Display/Bold Text" $1
+  fi
+}
+# Switch np environment
+# example usage:
+#    `_p_set_env np`
+#    `_p_set_env e1-np`
+#    `_p_set_env mgmt`
+_p_set_env() {
+  _p_setting_set "/★ Debug Settings/PlayStation Network/NP Environment" $1
+  p_reboot
 }
