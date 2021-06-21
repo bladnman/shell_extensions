@@ -6,10 +6,18 @@ SCRIPT_FULL_PATH_GIT="$SCRIPT_DIR_GIT/$(basename -- "$0")"
 
 PATH=/usr/local/bin:$PATH
 
+# STANDARD GIT ALIASES
+alias gsave='_git_save_all'   # save-all
+alias gsend='_git_push_all'   # save-and-push-all
+alias gbr='_git_go_to_branch' # create and checkout branch
+
+alias github_init='_git__init'
+
+# some more specific to GH
 alias glt_since='_git__log_tickets_since'
 alias glt_since_string='_git__log_tickets_since_string'
 alias gl_since='_git__log_since'
-alias github_init='_git__init'
+
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS
 # -=-=-=-=-=-=-=-=-=-=-=-=
@@ -83,4 +91,54 @@ _git__log_since() {
 }
 _git__init() {
   . ${SCRIPT_DIR_GIT}/git_create_and_upload.sh
+}
+_git_push_all() {
+  echo
+  # bail - not a git repo
+  if _git__isnot_git_tree; then
+    echo_red "❌ Current folder contains no git repo"
+    false
+    return
+  fi
+
+  if _git__has_changes; then
+    local message="${1:=WIP}"
+    git add -A
+    git commit -m "$message"
+  else
+    echo_green "✅ No new changes to save. Attempting push..."
+  fi
+
+  git push
+  echo_green "✅ Everything pushed."
+}
+_git_save_all() {
+  echo
+  # bail - not a git repo
+  if _git__isnot_git_tree; then
+    echo_red "❌ Current folder contains no git repo"
+    false
+    return
+  fi
+
+  if _git__has_changes; then
+    local message="${1:=WIP}"
+    git add -A
+    git commit -m "$message"
+    echo_green "✅ Everything saved."
+  else
+    echo_green "✅ All good. Nothing new to save."
+  fi
+}
+_git_go_to_branch() {
+  if [ -z "$1" ]; then
+    # list branches
+    git branch -a
+  else
+    if _git__local_branch_exists $1; then
+      git checkout $1
+    else
+      git checkout -b $1
+    fi
+  fi
 }

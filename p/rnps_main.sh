@@ -51,7 +51,6 @@ alias p_kill_shell='echo_blue "Killing Shell"; _p_cli kill SceShellUI'
 alias p_kill_shell_disco='p_disco; p_kill_shell'
 alias p_id='_p_set_test_ids'
 alias p_kd='p_kill_shell_disco'
-alias ppk='p_kill_shell'
 alias p_disco='echo_blue "Disconnecting any user"; _p_cli force-disconnect'
 alias p_get_info="_p_info_formatted"
 alias p_get_extended="_p_extended_info_formatted"
@@ -90,13 +89,24 @@ alias p_offline='_p_setting_set "/Network/Internet Connection" 0'
 alias p_env_e1='_p_set_env e1-np'
 alias p_env_np='_p_set_env np'
 alias p_env_mgmt='_p_set_env mgmt'
+alias p_dev='p_env_e1'
+alias p_mgmt='p_env_mgmt'
+alias p_prod='p_env_np'
 
 # VERY SHORT
 alias uip='_p_ip_update'
+
 alias pss='_p_screenshot'
+alias prb='p_reboot'
+
 alias pk='p_kill_shell; sh_say "Sir, your shell has been invigorated."'
+alias ppk='pk'
+alias pkk='pk'
+alias pdi='pk'
+
 alias ppup='p_pup_latest'
 alias p_pup='p_pup_latest'
+alias pup='p_pup_latest'
 
 _p_resize_snaps_by_50() {
   P_SS_PATH=~/Pictures/SCE/Prospero
