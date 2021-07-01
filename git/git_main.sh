@@ -10,6 +10,7 @@ PATH=/usr/local/bin:$PATH
 alias gsave='_git_save_all'   # save-all
 alias gsend='_git_push_all'   # save-and-push-all
 alias gbr='_git_go_to_branch' # create and checkout branch
+alias gtag='_git_tag'         # tag and push
 
 alias github_init='_git__init'
 
@@ -138,19 +139,55 @@ _git_save_all() {
   fi
 }
 _git_go_to_branch() {
+  echo
+  # bail - not a git repo
+  if _git__isnot_git_tree; then
+    echo_red "❌ Current folder contains no git repo"
+    false
+    return
+  fi
+
   if [ -z "$1" ]; then
     # not given a branch name -- list branches
     git branch -a
   else
     if _git__local_branch_exists $1; then
-      echo "checking out local branch"
+      echo_green "✅ checking out local branch"
       git checkout $1
     elif _git__remote_branch_exists $1; then
-      echo "checking out remote branch"
+      echo_green "✅ checking out remote branch"
       git checkout $1
     else
-      echo "creating a new branch"
+      echo_green "✅ creating a new branch"
       git checkout -b $1
     fi
   fi
+}
+_git_tag() {
+  echo
+  # bail - not a git repo
+  if _git__isnot_git_tree; then
+    echo_red "❌ Current folder contains no git repo"
+    false
+    return
+  fi
+
+  # 2 tag types:
+  #   - tag only
+  #   - tag and description
+  #
+  # NOTHING
+  if [ -z "$1" ]; then
+    echo_red "❌ must include tag name"
+    false
+    return
+  # TAG ONLY
+  elif [ -z "$2" ]; then
+    git tag $1
+  # TAG AND DESC
+  else
+    git tag -a $1 -m "$2"
+  fi
+  git push origin $1
+  echo_green "✅ Tagged and pushed."
 }
