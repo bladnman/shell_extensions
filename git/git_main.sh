@@ -73,6 +73,13 @@ _git__local_branch_exists() {
   git show-ref --verify --quiet refs/heads/$1
   # $? == 0 means local branch with <branch-name> exists.
 }
+_git__remote_branch_exists() {
+  if git ls-remote origin "$1" | grep -sw "$1" 2>&1 >/dev/null; then
+    true
+  else
+    false
+  fi
+}
 _git__current_branch_name() {
   # https://stackoverflow.com/a/24210877/473501
   git branch --no-color | grep -E '^\*' | awk '{print $2}' ||
@@ -132,12 +139,17 @@ _git_save_all() {
 }
 _git_go_to_branch() {
   if [ -z "$1" ]; then
-    # list branches
+    # not given a branch name -- list branches
     git branch -a
   else
     if _git__local_branch_exists $1; then
+      echo "checking out local branch"
+      git checkout $1
+    elif _git__remote_branch_exists $1; then
+      echo "checking out remote branch"
       git checkout $1
     else
+      echo "creating a new branch"
       git checkout -b $1
     fi
   fi
