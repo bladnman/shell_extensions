@@ -7,10 +7,12 @@ SCRIPT_FULL_PATH_GIT="$SCRIPT_DIR_GIT/$(basename -- "$0")"
 PATH=/usr/local/bin:$PATH
 
 # STANDARD GIT ALIASES
-alias gsave='_git_save_all'   # save-all
-alias gsend='_git_push_all'   # save-and-push-all
-alias gbr='_git_go_to_branch' # create and checkout branch
-alias gtag='_git_tag'         # tag and push
+alias gsave='_git_save_all'      # save-all
+alias gsend='_git_push_all'      # save-and-push-all
+alias gbr='_git_go_to_branch'    # create and checkout branch
+alias gtag='_git_tag'            # tag and push
+alias gpurge='_git_branch_purge' # purge local branches
+alias git_purge='gpurge'
 
 alias github_init='_git__init'
 
@@ -190,4 +192,11 @@ _git_tag() {
   fi
   git push origin $1
   echo_green "✅ Tagged and pushed."
+}
+_git_branch_purge() {
+  # this gets a list of all local branches which no longer have upstream
+  # references (were deleted on origin) and deletes them.
+  # https://stackoverflow.com/questions/24144602/git-how-do-i-list-local-branches-that-are-tracking-remote-branches-that-no-long
+  # https://github.com/astyagun/.files/blob/268503c172f384279f11ac12a55634832cb54f72/bin/git-branch-purge
+  LANG=en git branch --format='%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' | grep '.' | xargs git branch -D
 }

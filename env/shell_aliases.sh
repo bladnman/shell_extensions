@@ -32,11 +32,63 @@ _sh_say() {
 }
 _sh_notify() {
   if [[ $? = 0 ]]; then
-    _sh_say "Sir. Job done."
+    local RANDOM=$$$(date +%s)
+    local expressions=(
+      "Happy days sir"
+      "Happy days sir"
+      "Happy days sir"
+      "Happy days sir"
+      "Happy days sir"
+      "Happy days sir"
+      "Happy days sir"
+      "Happy days sir"
+      "Happy days sir"
+      "Better than I had hoped"
+      "I knew you had this one sir"
+      "Awesome work sir"
+      "Awesome work sir"
+      "Awesome work sir"
+      "Awesome work sir"
+      "Awesome work sir"
+      "Awesome work sir"
+      "Awesome work sir"
+      "That is how it is done sir"
+      "They will build a statue of you sir"
+      "Random happy sentiment expressed with joy"
+    )
+    local selectedexpression=${expressions[$RANDOM % ${#expressions[@]} + 1]}
+    _sh_say $selectedexpression
     true
     return
   else
-    _sh_say "I'm sorry sir."
+    local RANDOM=$$$(date +%s)
+    local expressions=(
+      "I would try that again"
+      "I would try that again"
+      "I would try that again"
+      "Not sure that's what you meant"
+      "Sorry sir"
+      "Sorry sir"
+      "Sorry sir"
+      "Sorry sir"
+      "Sorry sir"
+      "Sorry sir"
+      "Sorry sir"
+      "Sorry sir"
+      "Sorry sir"
+      "Maybe again with effort, sir?"
+      "Think you'd better take a look at this"
+      "Dissatisfied emoji"
+      "Thumbs down sir"
+      "I believe in you sir"
+      "Don't give up sir"
+      "Don't give up sir"
+      "Don't give up sir"
+      "Don't give up sir"
+      "Chosen message of future success here"
+    )
+    local selectedexpression=${expressions[$RANDOM % ${#expressions[@]} + 1]}
+    _sh_say $selectedexpression
     false
     return
   fi
