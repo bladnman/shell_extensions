@@ -2,6 +2,16 @@
 # -= ENV VARS
 # -=-+-=-+-=-+-=-+
 SCRIPT_DIR=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
+
+# try to get to our shell_extensions folder if possible
+if [[ $SCRIPT_DIR != *"shell_extensions"* ]]; then
+  if [[ -d "/Users/mmaher/shell_extensions" ]]; then
+    SCRIPT_DIR="/Users/mmaher/shell_extensions"
+  elif [[ -d "/Users/bladnman/shell_extensions" ]]; then
+    SCRIPT_DIR="/Users/bladnman/shell_extensions"
+  fi
+fi
+
 SCRIPT_FULL_PATH="$SCRIPT_DIR/$(basename -- "$0")"
 
 # export it for others if they want it
@@ -19,7 +29,7 @@ export SHELL_EXT_FOLDER
 . $SHELL_EXT_FOLDER/aliases.sh
 . $SHELL_EXT_FOLDER/aliases_code.sh
 . $SHELL_EXT_FOLDER/searching.sh
-. $SHELL_EXT_FOLDER/python.sh
+source $SHELL_EXT_FOLDER/python/python.sh
 
 # - - - -
 # - PROJECTS

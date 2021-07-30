@@ -6,12 +6,10 @@
 
 __pcli=prospero-cli
 
-# Root repo folder for rnps-game-hub
-# __source_path=~/code/p/rnps-game-hub
-__source_path=~/Downloads
+# Root repo folder for PUPS
+__source_path=/Users/mmaher/code/p/PUPs
 
 # Console folder for builds
-# __dest_path=/data/rnps/gamehub-bun/
 __dest_path=
 
 # Console IP
@@ -19,82 +17,85 @@ __dest_path=
 #    -ip=<IP>
 __console_ip=
 
-function _main() {
-  # function that will
-  #   - take in a branch name
-  #   - go to GH repo root folder
-  #   - checkout that branch
-  #   - yarn && build
-  #   - push to console
-  #   - set console manifest to QA
-  # These steps are preceded by a few git
-  # checks to mnke sure there are no changes in
-  # current env... thus, safe to checkout
-  # NOTE:
-  #   git commands require functions set up
-  #   by other shell_extention scripts
-  #   (git_main.sh at the moment)
+whichVersionLabel="Which version would you like to install"
+nothingInstallingLabel="⛔️ You chose to not install. Exiting"
+invalidLocationLabel="❌ No PUP file found at location to install."
+_pup_path="" # to be set in setter function
 
+_setSelectedPupDir() {
+  local count=0
+  local directoryList=()
+  # do this, do NOT parse 'ls'... take my word for it!
+  local orig_dir=$(pwd)
+  cd $__source_path
+  for item in */; do
+    local cleaned=$(echo $item | sed 's/\///')
+    directoryList+=($cleaned)
+  done
+  cd $orig_dir
+  for dir in "${directoryList[@]}"; do
+    let count++
+    echo "  ${sh_color_green}$count) $dir${sh_color_nc}"
+  done
+
+  echo
+  __echo_yellow $whichVersionLabel
+  read "?  ? [none] " answer
+
+  if [[ ! -z "$answer" ]]; then
+    local selectedDirName=$directoryList[$answer]
+    local thisPupDirPath=$__source_path/$selectedDirName
+    local installFileName="PS5UPDATE.I.cex_on_devkit.intdev.qaf.PUP"
+    local fileTest="$__source_path/$directoryList[$answer]/$installFileName"
+    # test for file
+    if [[ ! -f "$fileTest" ]]; then
+      echo $invalidLocationLabel
+    else
+      _pup_path=$fileTest
+    fi
+  fi
+}
+function _main() {
   # use a little bash magic var
   start_time=$SECONDS
 
-  __orig_dir=$(pwd)
-  cd $__source_path
+  _print_banner
 
-  # replace " (" with "_(" since we are splitting on spaces
-  local folderName=$(ls -lt --color=none | egrep '^d' | grep pup | head -1 | sed 's/ (/_(/g' | sed 's/    / /g' | sed 's/   / /g' | sed 's/  / /g' | cut -d " " -f10)
-  # then return it to " (" if it's there
-  folderName=$(sed 's/_(/ (/g' <<<$folderName)
-  if [ -z $folderName ]; then
-    __echo_red "❌ No PUP directory found. Exiting"
-    return -1
-  fi
-  local pup_directory_path="$__source_path/$folderName"
-  if [ ! -d $pup_directory_path ]; then
-    __echo_red "❌ The path found for latest PUP directory was not valid. Exiting"
-    echo $pup_directory_path
-    cd $__orig_dir
+  # LET THE USER SELECT THE PUP TO PUSH
+  _setSelectedPupDir
+
+  # VERIFY THEY CHOSE SOMETHING
+  if [[ "$_pup_path" == "" ]]; then
+    echo $nothingInstallingLabel
     return -1
   fi
 
-  pup_file_path="$pup_directory_path/PS5UPDATE.I.cex_on_devkit.intdev.qaf.PUP"
-  pup_file_path=$(sed 's/\/\//\//g' <<<$pup_file_path)
-  if [ ! -f $pup_file_path ]; then
-    __echo_red "❌ The path seems to not include a valid PUP file. Exiting"
-    echo $pup_file_path
-    cd $__orig_dir
-    return -1
-  fi
-
-  # ARE YOU SURE?
-  directory_date=$(date -r $pup_directory_path +"%Y-%m-%d %H:%M:%S")
-  __echo_blue "Latest PUP file found:"
-  __echo_green "    $pup_directory_path"
-  __echo_yellow "    $directory_date"
-  echo
-
-  read -q "?Would you like to install this PUP? y/[n] " answer
-  if [[ "$answer" =~ ^[Nn]$ ]]; then
-    echo
-    __echo_red "❌ You chose to not install. Exiting"
-    cd $__orig_dir
-    return -1
-  fi
+  # continue on installing
 
   # START UPDATE
   echo
   echo
   __echo_blue "Beginning update:"
-  p_pup_install "$pup_file_path"
 
-  # return to the place we started
-  cd $__orig_dir
+  p_pup_install "$_pup_path"
 
   # COMPLETE : DURATION
   echo
   __echo_green "  - - - - - - -"
   elapsed_time=$(($SECONDS - $start_time))
   __echo_green "✅ All done! Completed in $(displaytime $elapsed_time)"
+  echo
+}
+_print_banner() {
+  echo
+  echo
+  echo
+  __echo_yellow "888                 d8           888 888                 888 88e  8888 8888 888 88e  "
+  __echo_yellow "888 888 8e   dP\"Y  d88    ,\"Y88b 888 888      ,\"Y88b     888 888D 8888 8888 888 888D "
+  __echo_yellow "888 888 88b C88b  d88888 \"8\" 888 888 888 888 \"8\" 888 888 888 88\"  8888 8888 888 88\"  "
+  __echo_yellow "888 888 888  Y88D  888   ,ee 888 888 888     ,ee 888     888      8888 8888 888      "
+  __echo_yellow "888 888 888 d,dP   888   \"88 888 888 888     \"88 888     888      'Y88 88P' 888      "
+  echo
 }
 
 # =--=--=--=--=--=--=--=--=--=--=--=--=--=--

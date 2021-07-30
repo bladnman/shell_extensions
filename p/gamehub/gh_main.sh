@@ -35,13 +35,13 @@ alias gh_link_title='_gh__link_title_gamehub'
 alias gh_link='_gh__link_any_gamehub'
 alias gh_link_ts='_gh__link_title_selector_gamehub'
 alias gh_plink='_gh__plink_any_gamehub'
-alias gh_tc='pytest --udid=$CONSOLE_IP -m '
+alias gh_tc='gh_qa_tc'
 alias gh_verify='_gh_verify_flow && _gh_verify_lint && _gh_verify_tests && ssay "Smashing job. Everything looks good sir."'
 alias gh_lint='_gh_verify_lint && ssay "Looks correct sir"'
 alias gh_flow='_gh_verify_flow && ssay "Your flow looks proper sir"'
 alias gh_tests='_gh_verify_tests && ssay "Perfect marks sir"'
 
-alias gh_qa_tc='pytest --udid=$CONSOLE_IP -m '
+alias gh_qa_tc='_gh__run_e2e_tc'
 alias gh_qa_post_memory_tests='_gh__qa_run_post_memory_tests'
 alias gh_qa_prep='_gh__qa_prepare; snotif'
 alias gh_stage_branch='_gh__do_stage_branch'
@@ -57,6 +57,7 @@ alias gh_find_used_errors='grep -r "SCE_RNPS_GAME_HUB_ERROR_" $CODE_FOLDER_GH/sr
 
 alias gh_mem="p_cli execute shellui 'rnps_jsmemstats \"rnps-game-hub (NPXS40033)\"' | grep HeapSize"
 alias ghmem=gh_mem
+alias gh_rnps="_gh__rnps_version"
 
 # short-short-handers
 alias stage_branch='gh_stage_branch'
@@ -64,7 +65,7 @@ alias stage_master='gh_stage_master'
 alias stb='gh_stage_branch'
 alias stm='gh_stage_master'
 alias smoke='_gh__run_e2e_smoke; snotif'
-alias tc='_gh__run_e2e_tc'
+alias tc='gh_qa_tc'
 alias ts='_gh__qa_run_test_suite_named; snotif'
 alias ghs='gh_serve'
 alias ghsb='gh_serve &'
@@ -204,18 +205,26 @@ _gh__link_title_gamehub() {
   p_cli execute shellui "openuri psgamehub:main?titleId=$@"
 }
 _gh__run_e2e_tc() {
-  PARAM=$1
-  LOWER_PARAM=$(printf '%s\n' "$PARAM" | awk '{ print tolower($0) }')
+  local tcnum=$1
+  local lowertcnum=$(printf '%s\n' "$tcnum" | awk '{ print tolower($0) }')
 
-  if [[ $LOWER_PARAM != *"tc"* ]]; then
-    LOWER_PARAM=tc$LOWER_PARAM
+  if [[ $lowertcnum != *"tc"* ]]; then
+    lowertcnum=tc$lowertcnum
   fi
 
   # need to be in the gh test root folder
   cd $TEST_E2E_FOLDER
 
-  echo pytest --udid=${CONSOLE_IP} -m ${LOWER_PARAM}
-  pytest --udid=${CONSOLE_IP} -m ${LOWER_PARAM}
+  echo
+  echo
+  clear
+  echo_blue "=-----=-----=-----=-----=-----="
+  echo_blue "        Start TC [$tcnum]"
+  echo_blue "=-----=-----=-----=-----=-----="
+  echo_yellow pytest --udid=${CONSOLE_IP} -m ${lowertcnum}
+  echo
+  echo
+  pytest --udid=${CONSOLE_IP} -m ${lowertcnum}
 
   snotif
 }
@@ -287,26 +296,7 @@ _gh__serve_all_gamehub() {
   wait
 }
 _gh__qa_prepare() {
-  echo_blue "Getting you ready for QA"
-
-  echo_blue "1. Create Virtual Environment"
-  cd $SKYNETE_CHECKOUT_FOLDER
-  python3 -m venv Skynete
-  source ./Skynete/bin/activate
-
-  # add our pyenv shims to front again
-  PATH="/Users/mmaher/.pyenv/shims:$PATH"
-
-  echo_blue "2. Install GH QA Dependancies (longer)"
-  cd $TEST_E2E_FOLDER
-  pip install -r requirements.txt
-
-  clear
-  echo
-  echo "Done."
-  echo "You can now execute test cases like so:"
-  echo_yellow "   > tc 85"
-  echo
+  . ${SCRIPT_DIR_GH}/scripts/gh_qa_prep.sh
 }
 _gh__setup_env() {
   # DEV - open editors
@@ -324,4 +314,7 @@ _gh__setup_env() {
 _gh__qa_run_post_memory_tests() {
   cd $TEST_E2E_FOLDER
   pytest --udid=$CONSOLE_IP -m memory_usage_postpurchase
+}
+_gh__rnps_version() {
+  cat "$CODE_FOLDER_GH/node_modules/react-native-playstation/package.json" | grep "version"
 }

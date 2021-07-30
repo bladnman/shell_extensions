@@ -371,6 +371,10 @@ _p_font_bold() {
     _p_setting_set "/Accessibility/Display/Bold Text" $1
   fi
 }
+
+## GET ALL SETTINGS
+#   _p_setting_get "/★ Debug Settings" > settings.txt
+
 # Switch np environment
 # example usage:
 #    `_p_set_env np`
