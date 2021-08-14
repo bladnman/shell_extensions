@@ -12,21 +12,22 @@ alias dash='openInDash'
 
 # # # #
 # Personal Aliases
-openInWebstorm () {
-    open -a /Applications/WebStorm.app $1
+openInWebstorm() {
+  open -a /Applications/WebStorm.app $1
 }
 openInDash() {
   open dash://$1
 }
-openInVisualStudioCode () {
-    open -a /Applications/Visual\ Studio\ Code.app $1
+openInVisualStudioCode() {
+  open -a /Applications/Visual\ Studio\ Code.app $1
 }
-alias webstorm='openInWebstorm';
-alias ws='webstorm';
-alias sub='sublime';
-alias vsc='openInVisualStudioCode';
-alias code='openInVisualStudioCode';
-alias cra='npx create-react-app';
+alias webstorm='openInWebstorm'
+alias ws='webstorm'
+alias sub='sublime'
+alias vsc='openInVisualStudioCode'
+alias code='openInVisualStudioCode'
+alias cra='npx create-react-app'
+alias cls="clear && printf '\e[3J'" # full clear, screen and scrollback
 
 # set title of window (iterm2)
 # function title {
