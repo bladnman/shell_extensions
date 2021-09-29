@@ -25,7 +25,7 @@ SKYNETE_CHECKOUT_FOLDER=~/code/p
 # -=  ALIASES
 # -=-=-=-=-=-=-=-=-=-=-=-=
 alias cdgh='cd $CODE_FOLDER_GH'
-alias cd_gh='cd $CODE_FOLDER_GH'
+alias cd_gh='cdgh'
 alias gh_dev='_gh__setup_env -dev -serve'
 alias gh_code='_gh__setup_env -dev'
 alias gh_serve='_gh__setup_env -serve'
@@ -84,6 +84,15 @@ alias mnd='gh_man_dev'
 alias mnc='gh_man_clear'
 alias grim='gh_grim'
 alias kl='ghkl'
+
+# GAME HUB LINK HELPERS
+alias ghl_spiderman='ghl UP8850-PPSL03749_00-PSGD000000000000'
+alias ghl_cod='ghl UP0050-PPSL01353_00-NQ60I83MI5LBHCTE'
+alias ghl_hardware='ghl IV0003-PPSL04889_00-0000000000000000'
+alias ghl_ironman='ghl UP8850-PPSL03849_00-2496871122222477'
+alias ghl_rage='ghl 10004247'
+alias ghl_fifa='ghl 10009452'
+alias ghl_doom='ghl 10011489'
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS
