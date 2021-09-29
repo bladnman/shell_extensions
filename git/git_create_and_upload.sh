@@ -30,7 +30,7 @@ read "__BGS?Have you created a new REPO on Github? [yes] : "
 
 # Create a local repo if not yet created
 _git_folder=$(git rev-parse --git-dir 2>/dev/null)
-if [ "$_git_folder" == "" ]; then
+if [ -z "$_git_folder" ]; then
   echo_blue "... initializing git repo in this folder"
 
   # create readme file
