@@ -68,7 +68,8 @@ alias smoke='_gh__run_e2e_smoke; snotif'
 alias tc='gh_qa_tc'
 alias ts='_gh__qa_run_test_suite_named; snotif'
 alias ghs='gh_serve'
-alias ghsb='gh_serve &'
+alias ghsb='echo_red "Background mode temporarily disabled. Running in foreground:"; gh_serve'
+# alias ghsb='gh_serve &'
 alias ghl='gh_link'
 alias ghlts='gh_link_ts'
 alias ghlp='_gh__plink_any_gamehub'
@@ -88,7 +89,8 @@ alias kl='ghkl'
 # GAME HUB LINK HELPERS
 alias ghl_spiderman='ghl UP8850-PPSL03749_00-PSGD000000000000'
 alias ghl_cod='ghl UP0050-PPSL01353_00-NQ60I83MI5LBHCTE'
-alias ghl_hardware='ghl IV0003-PPSL04889_00-0000000000000000'
+alias ghl_hardware='ghl PPSL04889'
+# alias ghl_hardware='ghl IV0003-PPSL04889_00-0000000000000000'
 alias ghl_ironman='ghl UP8850-PPSL03849_00-2496871122222477'
 alias ghl_rage='ghl 10004247'
 alias ghl_fifa='ghl 10009452'
@@ -317,7 +319,11 @@ _gh__setup_env() {
   if [[ $* == *"-serve"* ]]; then
     # _gh__serve_all_gamehub
     cd $CODE_FOLDER_GH
-    yarn start
+    # yarn start
+
+    # I believe we want --config ./_local/metro.config.js
+    # on this next line, but it does not seem to work just yet
+    node ./node_modules/react-native-playstation/cli start
   fi
 }
 _gh__qa_run_post_memory_tests() {
