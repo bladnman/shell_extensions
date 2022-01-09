@@ -36,6 +36,7 @@ source $SHELL_EXT_FOLDER/python/python.sh
 # - - - -
 . $SHELL_EXT_FOLDER/project/democrotizer_main.sh
 . $SHELL_EXT_FOLDER/project/portfolio_main.sh
+. $SHELL_EXT_FOLDER/project/python_spark.sh
 
 # - - - -
 # - PROGRAMS
