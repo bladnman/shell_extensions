@@ -1,5 +1,5 @@
 alias bls='/bin/ls -Fh'
-alias gls='/usr/local/opt/coreutils/libexec/gnubin/ls'
+alias gls=_gls
 alias ls='gls --color -Fh --group-directories-first'
 alias ll='ls -la'
 alias l.='ls -d .*'
@@ -19,6 +19,18 @@ alias ssay='sh_say'
 alias snotif='sh_notify'
 alias sn='sh_notify'
 
+
+_gls() {
+  intel_ls='/usr/local/opt/coreutils/libexec/gnubin/ls'
+  m1_ls='/opt/homebrew/opt/coreutils/libexec/gnubin/ls'
+  if [ -f $intel_ls ]; then
+    ${intel_ls} $@
+  else
+    ${m1_ls} $@
+  fi
+  true
+  return
+}
 _cmd__exists() {
   if [[ $(which ${1}) =~ not\ found ]]; then
     false
