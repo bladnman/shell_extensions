@@ -1,3 +1,4 @@
 CODE_FOLDER=~/code
 
-cd_code='cd $CODE_FOLDER'
+alias cd_code='cd $CODE_FOLDER'
+alias cdcode='cd $CODE_FOLDER'

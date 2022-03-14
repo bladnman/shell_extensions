@@ -48,8 +48,14 @@ source $SHELL_EXT_FOLDER/python/python.sh
 # - - - -
 . $SHELL_EXT_FOLDER/p/rnps_main.sh
 . $SHELL_EXT_FOLDER/p/gamehub/gh_main.sh
+. $SHELL_EXT_FOLDER/p/bgs/bgs_main.sh
 
 . $SHELL_EXT_FOLDER/wallpaper/wallpaper.sh
+
+# -=-=-=-=-=-=-=-=-=-=-=-=
+# -=  SHELL SCRIPTS
+# -=-=-=-=-=-=-=-=-=-=-=-=
+. $SHELL_EXT_FOLDER/project/shell_scripts.sh
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  BE HAPPY

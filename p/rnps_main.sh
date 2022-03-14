@@ -20,7 +20,8 @@ SCRIPT_FULL_PATH_P="$SCRIPT_DIR_P/$(basename -- "$0")"
 # CONSOLE_IP='10.125.53.245'
 # CONSOLE_IP='10.32.254.234'
 # CONSOLE_IP='10.32.254.229'
-CONSOLE_IP='10.58.23.20'
+# CONSOLE_IP='10.58.23.20'
+CONSOLE_IP='10.58.2.204'
 MACHINE_NAME='us38f9d32262b1'
 CODE_FOLDER_P=~/code/p
 SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
@@ -48,7 +49,8 @@ alias p_man_url='_p_manifest_url'
 alias p_man_named='_p_manifest_named'
 alias p_create_sample='_p_create_sample'
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
-alias p_kill_shell='echo_blue "Killing Shell"; _p_cli kill SceShellUI'
+alias p_kill_shell='echo_blue "Killing Shell"; p_kill_jscd; _p_cli kill SceShellUI'
+alias p_kill_jscd='echo_blue "Killing Shell"; _p_cli kill SceJSCd'
 alias p_kill_shell_disco='p_disco; p_kill_shell'
 alias p_id='_p_set_test_ids'
 alias p_kd='p_kill_shell_disco'
@@ -74,6 +76,8 @@ alias p_resize_snaps='_p_resize_snaps_by_50'
 alias p_pkg_install='_p_pkg_install'
 alias p_pup_install='_p_pup_install'
 alias p_pup_latest='_p_pup_latest'
+alias p_dl_bgs='_p_dl_bgs'
+alias dl_bgs='_p_dl_bgs'
 
 # SETTINGS
 alias p_set_voice_on='_p_setting_set "/Accessibility/Screen Reader/Enable Screen Reader" 1'
@@ -132,7 +136,8 @@ _p_resize_snaps_by_50() {
 _p_screenshot() {
   SS_NAME=$(date -u +'%Y-%m-%d_%H%M%S')
   SS_PATH=$CODE_FOLDER_P/screenshots/$SS_NAME.png
-  IMG_EDITOR="/Applications/Snagit 2020.app/Contents/MacOS/Snagit 2020"
+  # IMG_EDITOR="/Applications/Snagit 2020.app/Contents/MacOS/Snagit 2020"
+  IMG_EDITOR="/Applications/Snagit 2022.app/Contents/MacOS/Snagit 2022"
   # IMG_EDITOR="/Applications/Setapp/CleanShot X.app/Contents/MacOS/CleanShot X Setapp"
   echo "starting snapshot process:"
   echo "    ${SS_PATH}"
@@ -392,4 +397,8 @@ _p_font_bold() {
 _p_set_env() {
   _p_setting_set "/★ Debug Settings/PlayStation Network/NP Environment" $1
   p_reboot
+}
+_p_dl_bgs() {
+  p_cli download --target_path "/system_data/priv/home/1695674e/nobackup/bgs_storage/bgs_storage_sqlite.db" --host_path "/Users/mmaher/Downloads/bgs_storage_sqlite.db"
+  echo_green "Check your Downloads folder"
 }
