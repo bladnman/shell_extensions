@@ -78,6 +78,8 @@ alias p_pup_install='_p_pup_install'
 alias p_pup_latest='_p_pup_latest'
 alias p_dl_bgs='_p_dl_bgs'
 alias dl_bgs='_p_dl_bgs'
+alias p_dl_appdb='_p_dl_appdb'
+alias dl_appdb='_p_dl_appdb'
 
 # SETTINGS
 alias p_set_voice_on='_p_setting_set "/Accessibility/Screen Reader/Enable Screen Reader" 1'
@@ -399,6 +401,18 @@ _p_set_env() {
   p_reboot
 }
 _p_dl_bgs() {
-  p_cli download --target_path "/system_data/priv/home/1695674e/nobackup/bgs_storage/bgs_storage_sqlite.db" --host_path "/Users/mmaher/Downloads/bgs_storage_sqlite.db"
-  echo_green "Check your Downloads folder"
+  date_stamp=$(date '+%Y-%m-%d_%H-%M-%S')
+  remotePath="/system_data/priv/home/1695674e/nobackup/bgs_storage/bgs_storage_sqlite.db"
+  localPath="/Users/mmaher/Downloads/${date_stamp}__bgs_storage_sqlite.db"
+  p_cli download --target_path $remotePath --host_path $localPath
+  echo_green "👍 Check your Downloads folder"
+  echo_yellow "     ${localPath}"
+}
+_p_dl_appdb() {
+  date_stamp=$(date '+%Y-%m-%d_%H-%M-%S')
+  remotePath="/system_data/priv/mms/app.db"
+  localPath="/Users/mmaher/Downloads/${date_stamp}__app.db"
+  p_cli download --target_path $remotePath --host_path $localPath
+  echo_green "👍 Check your Downloads folder"
+  echo_yellow "     ${localPath}"
 }
