@@ -27,7 +27,7 @@ alias sub='sublime'
 alias vsc='openInVisualStudioCode'
 alias code='openInVisualStudioCode'
 alias cra='npx create-react-app'
-alias cls="clear && printf '\e[3J'" # full clear, screen and scrollback
+alias cls="clear && printf '\e[3J'" # full clear, screen and scroll back
 
 # set title of window (iterm2)
 # function title {

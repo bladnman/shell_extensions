@@ -61,6 +61,8 @@ alias p_get_user='_p_user_formatted'
 alias p_get_manifest='_p_manifest_formatted'
 alias p_get_manifest_contents='_p_manifest_contents_formatted'
 alias p_reboot='_p_cli reboot'
+alias p_poweroff='_p_cli poweroff'
+alias p_poweron='_p_cli poweron'
 alias cd_p='cd $CODE_FOLDER_P'
 alias p_ss='_p_screenshot'
 
@@ -401,8 +403,27 @@ _p_set_env() {
   p_reboot
 }
 _p_dl_bgs() {
+  # user may send in userid to use
+  userid_arg=$1
+
+  # get the active userid
+  # but only do this if userid_arg is not provided
+  if [ -z "$userid_arg" ]; then
+    echo_yellow "No userid specified, looking for active userid"
+    userid_active=$(_p_get_user_id)
+  fi
+
+  # we also will define a default userid
+  userid_default="1695674e"
+
+  # coalesce the userid
+  userid="${userid_arg:-${userid_active:-${userid_default}}}"
+
+  # we need to make sure to remove the "0x" from the userid
+  userid=$(echo ${userid/0x/})
+
   date_stamp=$(date '+%Y-%m-%d_%H-%M-%S')
-  remotePath="/system_data/priv/home/1695674e/nobackup/bgs_storage/bgs_storage_sqlite.db"
+  remotePath="/system_data/priv/home/${userid}/nobackup/bgs_storage/bgs_storage_sqlite.db"
   localPath="/Users/mmaher/Downloads/${date_stamp}__bgs_storage_sqlite.db"
   p_cli download --target_path $remotePath --host_path $localPath
   echo_green "👍 Check your Downloads folder"
@@ -415,4 +436,10 @@ _p_dl_appdb() {
   p_cli download --target_path $remotePath --host_path $localPath
   echo_green "👍 Check your Downloads folder"
   echo_yellow "     ${localPath}"
+}
+_p_get_user_id() {
+  user_info_json=$(p_get_user)
+  # echo_blue "user_info_json: $user_info_json"
+  userid=$(echo ${user_info_json} | jq --raw-output '.UserID')
+  echo $userid
 }

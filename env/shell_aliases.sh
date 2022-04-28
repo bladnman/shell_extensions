@@ -18,7 +18,7 @@ alias sh_notify='_sh_notify'
 alias ssay='sh_say'
 alias snotif='sh_notify'
 alias sn='sh_notify'
-
+alias ducks='du -cksh * | sort -hr | head -n 15' # directory size list (looking for big guys)
 
 _gls() {
   intel_ls='/usr/local/opt/coreutils/libexec/gnubin/ls'
