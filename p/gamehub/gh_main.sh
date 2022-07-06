@@ -51,6 +51,7 @@ alias gh_man_master='_gh__switch_manifest game-hub__device-mast "Now using on bo
 alias gh_man_branch='_gh__switch_manifest game-hub__device-branch "Now using on board branch manifest, sir"'
 alias gh_man_dev='_gh__switch_manifest "game-hub__dev" "Dev manifest enabled, sir"'
 alias gh_man_clear='_gh__switch_manifest game-hub__clear "Clear manifest installed, sir"'
+alias gh_man_bgs='_gh__switch_manifest bgs "BGS manifest installed, sir"'
 
 alias gh_grim='cd ~/code/p/grimoire-browser; yarn start'
 alias gh_find_used_errors='grep -r "SCE_RNPS_GAME_HUB_ERROR_" $CODE_FOLDER_GH/src --exclude=*rnps_app_game_hub_error.json | grep -o SCE_RNPS_GAME_HUB_ERROR_[^.,\;\ ]* | sort | uniq -c'
@@ -87,14 +88,16 @@ alias grim='gh_grim'
 alias kl='ghkl'
 
 # GAME HUB LINK HELPERS
-alias ghl_spiderman='ghl UP8850-PPSL03749_00-PSGD000000000000'
-alias ghl_cod='ghl UP0050-PPSL01353_00-NQ60I83MI5LBHCTE'
-alias ghl_hardware='ghl PPSL04889'
-# alias ghl_hardware='ghl IV0003-PPSL04889_00-0000000000000000'
-alias ghl_ironman='ghl UP8850-PPSL03849_00-2496871122222477'
-alias ghl_rage='ghl 10004247'
-alias ghl_fifa='ghl 10009452'
-alias ghl_doom='ghl 10011489'
+alias ghl_spiderman='ghl UP8850-PPSL03749_00-PSGD000000000000    # SPIDERMAN'
+alias ghl_sm='ghl UP8850-PPSL03749_00-PSGD000000000000    # SPIDERMAN'
+alias ghl_cod='ghl UP0050-PPSL01353_00-NQ60I83MI5LBHCTE    # COD'
+alias ghl_hardware='ghl PPSL04889   # HWRL'
+alias ghl_hw='ghl PPSL04889   # HWRL'
+alias ghl_swqa='ghl PPSL03616        # SWQA'
+alias ghl_ironman='ghl UP8850-PPSL03849_00-2496871122222477      # IRONMAN'
+alias ghl_rage='ghl 10004247     # RAGE'
+alias ghl_fifa='ghl 10009452      # FIFA'
+alias ghl_doom='ghl 10011489      # DOOM'
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS

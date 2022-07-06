@@ -21,22 +21,29 @@ SCRIPT_FULL_PATH_P="$SCRIPT_DIR_P/$(basename -- "$0")"
 # CONSOLE_IP='10.32.254.234'
 # CONSOLE_IP='10.32.254.229'
 # CONSOLE_IP='10.58.23.20'
-CONSOLE_IP='10.58.2.204'
-MACHINE_NAME='us38f9d32262b1'
+#CONSOLE_IP='10.58.2.204'
+export CONSOLE_IP='10.58.202.6'
+export MACHINE_NAME='us38f9d32262b1'
 CODE_FOLDER_P=~/code/p
 SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
 SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
 MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
 PCLI_COMMAND=prospero-cli
-DEVKIT_IP=$CONSOLE_IP
+export DEVKIT_IP=$CONSOLE_IP
 # PCLI_COMMAND=prospero-cli-mac
 # export SKYNET_CREDENTIAL=bladnman+e1@gmail.com:bob_is_happy
 export SKYNET_CREDENTIAL=bladnman+e1qa@gmail.com:bob_is_happy
 
 alias p_cli='$PCLI_COMMAND $CONSOLE_IP'
 alias p_con='_p_cli get console | sed "/^$/d"'
+#alias p_con_shellui='p_con | grep --line-buffered "SceShellUI"' | sed 's/.*[\[SceShellUI\]]//'
+alias p_con_shellui="p_con | awk '!/rnps-.*NPXS/' | awk '/SceShellUI/' | sed 's/M@/🐽/' | sed 's/.*[\[SceShellUI\]]//' "
+alias p_con_jsconsole="_p_con_jsconsole "
+alias p_con_m@="_p_con_jsconsole 🐽 M@ "
+
 alias p_man='p_get_manifest'
 alias p_man_dev='_p_manifest_named game-hub__dev; p_kill_shell; ssay "Manifest moved to dev, sir."'
+alias p_man_dev_no_remote_debug='_p_manifest_named game-hub__dev_no_remote_debug; p_kill_shell; ssay "Manifest moved to dev no debug, my man."'
 alias p_man_gh='p_man_dev'
 alias p_man_qa='_p_manifest_named game-hub__device-branch; p_kill_shell; ssay "Manifest moved to on-board branch, sir."'
 alias p_man_qa_auto='_p_manifest_named game-hub-qa-automation; p_kill_shell; ssay "Manifest moved to qa automation, sir."'
@@ -177,6 +184,29 @@ _p_screenshot() {
 }
 _p_cli() {
   $PCLI_COMMAND $CONSOLE_IP $@
+}
+
+_p_con_jsconsole() {
+  _cmd="p_con_shellui | sed 's/.*JSConsole\ \://'"
+  _extra=""
+
+  for value in "$@"
+  do
+    if [ "$_extra" ]; then
+      _extra="$_extra || /$value/"
+    else
+      _extra="/$value/"
+    fi
+  done
+
+  if [ "$_extra" ]; then
+    echo "$_cmd | awk '$_extra'"
+    eval "$_cmd | awk '$_extra'"
+  else
+    echo "$_cmd"
+    eval "$__cmd"
+  fi
+
 }
 _p_info_formatted() {
   _p_cli get info | sed -e "s/'/\"/g" | jq

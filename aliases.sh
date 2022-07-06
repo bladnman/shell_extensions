@@ -21,7 +21,8 @@ openInDash() {
 openInVisualStudioCode() {
   open -a /Applications/Visual\ Studio\ Code.app $1
 }
-alias webstorm='openInWebstorm'
+# WS now has its own command-line launcher... let's try that (install from WS with "command-line launcher")
+#alias webstorm='openInWebstorm'
 alias ws='webstorm'
 alias sub='sublime'
 alias vsc='openInVisualStudioCode'
@@ -33,3 +34,5 @@ alias cls="clear && printf '\e[3J'" # full clear, screen and scroll back
 # function title {
 #     echo -ne "\033]0;"$*"\007"
 # }
+
+alias cdbrain='cd "/Users/mmaher/Library/Mobile Documents/iCloud~md~obsidian/Documents/iBrain"'

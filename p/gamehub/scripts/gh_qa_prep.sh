@@ -9,8 +9,8 @@ SCRIPT_DIR_GH_QA_PREP="$(cd "$(dirname $0)" && pwd)"
 # - only thing is `activate` is not being
 # - run, so maybe I will reverse this decision
 #
-# echo_blue "-> Activating Python venv"
-# pyenv activate gamehub-qa
+echo_blue "-> Activating Python venv"
+pyenv activate gamehub-qa
 
 echo_blue "-> Install GH QA Requirements.txt"
 cd $TEST_E2E_FOLDER
@@ -31,7 +31,7 @@ echo_green "   > tc 85"
 # this is no longer used for me. Keeping here in case we move
 # away from this one day
 #
-# source "$SCRIPT_DIR_GH_QA_PREP/gh_qa_activate_skynete.sh"
-# cd $TEST_E2E_FOLDER
-# pip install -r requirements.txt
+source "$SCRIPT_DIR_GH_QA_PREP/gh_qa_activate_skynete.sh"
+cd $TEST_E2E_FOLDER
+pip install -r requirements.txt
 #
