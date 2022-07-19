@@ -40,6 +40,7 @@ alias p_con='_p_cli get console | sed "/^$/d"'
 alias p_con_shellui="p_con | awk '!/rnps-.*NPXS/' | awk '/SceShellUI/' | sed 's/M@/🐽/' | sed 's/.*[\[SceShellUI\]]//' "
 alias p_con_jsconsole="_p_con_jsconsole "
 alias p_con_m@="_p_con_jsconsole 🐽 M@ "
+alias filter_logs="python ~/code/python/console_log/filter_logs.py"
 
 alias p_man='p_get_manifest'
 alias p_man_dev='_p_manifest_named game-hub__dev; p_kill_shell; ssay "Manifest moved to dev, sir."'

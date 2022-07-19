@@ -28,6 +28,7 @@ export SHELL_EXT_FOLDER
 
 . $SHELL_EXT_FOLDER/aliases.sh
 . $SHELL_EXT_FOLDER/aliases_code.sh
+. $SHELL_EXT_FOLDER/aliases_scripts.sh
 . $SHELL_EXT_FOLDER/searching.sh
 source $SHELL_EXT_FOLDER/python/python.sh
 
