@@ -88,6 +88,7 @@ alias mnd='gh_man_dev'
 alias mnc='gh_man_clear'
 alias grim='gh_grim'
 alias kl='ghkl'
+alias stage_quick='cd $CODE_FOLDER_ROOT_GH;npm run ci:build-dev; p_cli upload --host-path=./bundles --target-path=/data/rnps/game-hub/ --is-directory;ppk'
 
 # GAME HUB LINK HELPERS
 alias ghl_spiderman='ghl UP8850-PPSL03749_00-PSGD000000000000    # SPIDERMAN'
