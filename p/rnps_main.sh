@@ -23,7 +23,7 @@ SCRIPT_FULL_PATH_P="$SCRIPT_DIR_P/$(basename -- "$0")"
 # CONSOLE_IP='10.58.23.20'
 #CONSOLE_IP='10.58.2.204'
 export CONSOLE_IP='10.58.202.6'
-export MACHINE_NAME='us38f9d32262b1'
+export MACHINE_NAME='bladn2022'
 CODE_FOLDER_P=~/code/p
 SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
 SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
@@ -40,11 +40,13 @@ alias p_con='_p_cli get console | sed "/^$/d"'
 alias p_con_shellui="p_con | awk '!/rnps-.*NPXS/' | awk '/SceShellUI/' | sed 's/M@/🐽/' | sed 's/.*[\[SceShellUI\]]//' "
 alias p_con_jsconsole="_p_con_jsconsole "
 alias p_con_m@="_p_con_jsconsole 🐽 M@ "
-alias filter_logs="python ~/code/python/console_log/filter_logs.py"
+alias filter_logs="python ~/code/python/console_log_filter/filter_logs.py"
 
 alias p_man='p_get_manifest'
 alias p_man_dev='_p_manifest_named game-hub__dev; p_kill_shell; ssay "Manifest moved to dev, sir."'
 alias p_man_dev_no_remote_debug='_p_manifest_named game-hub__dev_no_remote_debug; p_kill_shell; ssay "Manifest moved to dev no debug, my man."'
+alias p_man_dev_bgs='_p_manifest_named game-hub__dev_bgs; p_kill_shell; ssay "Manifest moved to dev only bgs, no game hub development."; p_kill_jscd;'
+alias p_man_dev_gh_and_bgs='_p_manifest_named game-hub__dev_with_bgs; p_kill_shell; ssay "Manifest moved to dev both game hub and bgs. Good luck, sir"'
 alias p_man_gh='p_man_dev'
 alias p_man_qa='_p_manifest_named game-hub__device-branch; p_kill_shell; ssay "Manifest moved to on-board branch, sir."'
 alias p_man_qa_auto='_p_manifest_named game-hub-qa-automation; p_kill_shell; ssay "Manifest moved to qa automation, sir."'
@@ -147,7 +149,8 @@ _p_resize_snaps_by_50() {
 }
 _p_screenshot() {
   SS_NAME=$(date -u +'%Y-%m-%d_%H%M%S')
-  SS_PATH=$CODE_FOLDER_P/screenshots/$SS_NAME.png
+#  SS_PATH=$CODE_FOLDER_P/screenshots/$SS_NAME.png
+  SS_PATH=~/Documents/graphics/screenshots/p/$SS_NAME.png
   # IMG_EDITOR="/Applications/Snagit 2020.app/Contents/MacOS/Snagit 2020"
   IMG_EDITOR="/Applications/Snagit 2022.app/Contents/MacOS/Snagit 2022"
   # IMG_EDITOR="/Applications/Setapp/CleanShot X.app/Contents/MacOS/CleanShot X Setapp"
@@ -455,7 +458,7 @@ _p_dl_bgs() {
 
   date_stamp=$(date '+%Y-%m-%d_%H-%M-%S')
   remotePath="/system_data/priv/home/${userid}/nobackup/bgs_storage/bgs_storage_sqlite.db"
-  localPath="/Users/mmaher/Downloads/${date_stamp}__bgs_storage_sqlite.db"
+  localPath="/Users/bladnman/Downloads/${date_stamp}__bgs_storage_sqlite.db"
   p_cli download --target_path $remotePath --host_path $localPath
   echo_green "👍 Check your Downloads folder"
   echo_yellow "     ${localPath}"
@@ -463,7 +466,7 @@ _p_dl_bgs() {
 _p_dl_appdb() {
   date_stamp=$(date '+%Y-%m-%d_%H-%M-%S')
   remotePath="/system_data/priv/mms/app.db"
-  localPath="/Users/mmaher/Downloads/${date_stamp}__app.db"
+  localPath="/Users/bladnman/Downloads/${date_stamp}__app.db"
   p_cli download --target_path $remotePath --host_path $localPath
   echo_green "👍 Check your Downloads folder"
   echo_yellow "     ${localPath}"

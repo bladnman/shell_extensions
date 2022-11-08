@@ -6,7 +6,7 @@
 ## Put the executable in
 ##    /usr/local/bin
 ## Set up your folder of images to choose from
-WALLPAPER_PATH="/Users/mmaher/Documents/uDesktop NEXT Library/Catalog"
+WALLPAPER_PATH="~/Documents/uDesktop NEXT Library/Catalog"
 WALLPAPER_PATH_CLEAN=$(sed 's/ /\\ /g' <<<"$WALLPAPER_PATH")
 WALLPAPER_LOGGING=0          # 0-false, 1-true
 WALLPAPER_DETAILED_LOGGING=1 # 0-false, 1-true

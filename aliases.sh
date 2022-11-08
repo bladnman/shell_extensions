@@ -29,6 +29,8 @@ alias vsc='openInVisualStudioCode'
 alias code='openInVisualStudioCode'
 alias cra='npx create-react-app'
 alias cls="clear && printf '\e[3J'" # full clear, screen and scroll back
+alias reset_shell='clear;exec "$SHELL"'
+alias rst='reset_shell'
 
 # set title of window (iterm2)
 # function title {
@@ -36,3 +38,5 @@ alias cls="clear && printf '\e[3J'" # full clear, screen and scroll back
 # }
 
 alias cdbrain='cd "/Users/mmaher/Library/Mobile Documents/iCloud~md~obsidian/Documents/iBrain"'
+
+# reset shell

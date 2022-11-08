@@ -7,7 +7,7 @@
 __pcli=prospero-cli
 
 # Root repo folder for PUPS
-__source_path=/Users/mmaher/code/p/PUPs
+__source_path=~/code/p/PUPs
 
 # Console folder for builds
 __dest_path=
