@@ -23,6 +23,8 @@ SCRIPT_FULL_PATH_P="$SCRIPT_DIR_P/$(basename -- "$0")"
 # CONSOLE_IP='10.58.23.20'
 #CONSOLE_IP='10.58.2.204'
 export CONSOLE_IP='10.58.202.6'
+# export CONSOLE_IP='10.58.28.78' # mantej - temporary
+
 export MACHINE_NAME='bladn2022'
 CODE_FOLDER_P=~/code/p
 SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
@@ -149,7 +151,7 @@ _p_resize_snaps_by_50() {
 }
 _p_screenshot() {
   SS_NAME=$(date -u +'%Y-%m-%d_%H%M%S')
-#  SS_PATH=$CODE_FOLDER_P/screenshots/$SS_NAME.png
+  #  SS_PATH=$CODE_FOLDER_P/screenshots/$SS_NAME.png
   SS_PATH=~/Documents/graphics/screenshots/p/$SS_NAME.png
   # IMG_EDITOR="/Applications/Snagit 2020.app/Contents/MacOS/Snagit 2020"
   IMG_EDITOR="/Applications/Snagit 2022.app/Contents/MacOS/Snagit 2022"
@@ -194,8 +196,7 @@ _p_con_jsconsole() {
   _cmd="p_con_shellui | sed 's/.*JSConsole\ \://'"
   _extra=""
 
-  for value in "$@"
-  do
+  for value in "$@"; do
     if [ "$_extra" ]; then
       _extra="$_extra || /$value/"
     else

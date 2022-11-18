@@ -28,7 +28,7 @@ CONSOLE_BGS_PREFETCH=$CONSOLE_BGS_ROOT/prefetch
 # -=-=-=-=-=-=-=-=-=-=-=-=
 alias cdbgs='cd $CODE_FOLDER_BGS'
 alias bgs_push_prefetch=_bgs_push_prefetch
-
+alias bgs_push_root=_bgs_push_root
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS
@@ -36,5 +36,10 @@ alias bgs_push_prefetch=_bgs_push_prefetch
 _bgs_push_prefetch() {
   echo_blue "BGS: Pushing prefetch bundle files ..."
   prospero-cli $CONSOLE_IP upload --host-path=${LOCAL_BUNDLE_PREFETCH} --target-path=${CONSOLE_BGS_PREFETCH} --is-directory
+  echo_green "BGS: Done"
+}
+_bgs_push_root() {
+  echo_blue "BGS: Pushing root bundle files ..."
+  prospero-cli $CONSOLE_IP upload --host-path=${LOCAL_BUNDLE_ROOT} --target-path=${CONSOLE_BGS_ROOT} --is-directory
   echo_green "BGS: Done"
 }
