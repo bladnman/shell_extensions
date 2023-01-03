@@ -151,11 +151,10 @@ _p_resize_snaps_by_50() {
 }
 _p_screenshot() {
   SS_NAME=$(date -u +'%Y-%m-%d_%H%M%S')
-  #  SS_PATH=$CODE_FOLDER_P/screenshots/$SS_NAME.png
   SS_PATH=~/Documents/graphics/screenshots/p/$SS_NAME.png
-  # IMG_EDITOR="/Applications/Snagit 2020.app/Contents/MacOS/Snagit 2020"
   IMG_EDITOR="/Applications/Snagit 2022.app/Contents/MacOS/Snagit 2022"
   # IMG_EDITOR="/Applications/Setapp/CleanShot X.app/Contents/MacOS/CleanShot X Setapp"
+
   echo "starting snapshot process:"
   echo "    ${SS_PATH}"
 

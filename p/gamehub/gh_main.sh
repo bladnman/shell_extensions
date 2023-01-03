@@ -101,6 +101,8 @@ alias ghl_ironman='ghl UP8850-PPSL03849_00-2496871122222477      # IRONMAN'
 alias ghl_rage='ghl 10004247     # RAGE'
 alias ghl_fifa='ghl 10009452      # FIFA'
 alias ghl_doom='ghl 10011489      # DOOM'
+alias ghl_ps3='ghl IV0002-SYSP00001_00-GAMEHUBPS3STREAM      # PS3 Product'
+
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS

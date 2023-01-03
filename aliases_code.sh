@@ -9,3 +9,6 @@ alias cdbgs='cd $CODE_FOLDER/p/ppr-bgs'
 alias cdpy='cd $CODE_FOLDER/python'
 alias cdp='cd $CODE_FOLDER/p'
 alias cddl='cd $DOWNLOADS_FOLDER'
+
+alias ys='yarn start'
+alias ns='npm start'
