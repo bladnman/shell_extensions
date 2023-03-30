@@ -10,5 +10,5 @@ alias cdpy='cd $CODE_FOLDER/python'
 alias cdp='cd $CODE_FOLDER/p'
 alias cddl='cd $DOWNLOADS_FOLDER'
 
-alias ys='yarn start'
-alias ns='npm start'
+alias ys='clear;yarn start'
+alias ns='clear;npm start'

@@ -75,6 +75,7 @@ alias p_get_manifest_contents='_p_manifest_contents_formatted'
 alias p_reboot='_p_cli reboot'
 alias p_poweroff='_p_cli poweroff'
 alias p_poweron='_p_cli poweron'
+alias p_upload='_p_upload'
 alias cd_p='cd $CODE_FOLDER_P'
 alias p_ss='_p_screenshot'
 
@@ -245,6 +246,9 @@ _p_manifest_url() {
 }
 _p_manifest_named() {
   prospero-cli $CONSOLE_IP set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/$1
+}
+_p_upload() {
+  _p_cli upload --host-path $1 --target-path $2
 }
 _p_create_sample() {
   APP_NAME=$1
