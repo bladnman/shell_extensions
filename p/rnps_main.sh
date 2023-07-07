@@ -37,6 +37,7 @@ export DEVKIT_IP=$CONSOLE_IP
 export SKYNET_CREDENTIAL=bladnman+e1qa@gmail.com:bob_is_happy
 
 alias p_cli='$PCLI_COMMAND $CONSOLE_IP'
+alias pcli=p_cli
 alias p_con='_p_cli get console | sed "/^$/d"'
 #alias p_con_shellui='p_con | grep --line-buffered "SceShellUI"' | sed 's/.*[\[SceShellUI\]]//'
 alias p_con_shellui="p_con | awk '!/rnps-.*NPXS/' | awk '/SceShellUI/' | sed 's/M@/🐽/' | sed 's/.*[\[SceShellUI\]]//' "
@@ -47,7 +48,7 @@ alias filter_logs="python ~/code/python/console_log_filter/filter_logs.py"
 alias p_man='p_get_manifest'
 alias p_man_dev='_p_manifest_named game-hub__dev; p_kill_shell; ssay "Manifest moved to dev, sir."'
 alias p_man_dev_no_remote_debug='_p_manifest_named game-hub__dev_no_remote_debug; p_kill_shell; ssay "Manifest moved to dev no debug, my man."'
-alias p_man_dev_bgs='_p_manifest_named game-hub__dev_bgs; p_kill_shell; ssay "Manifest moved to dev only bgs, no game hub development."; p_kill_jscd;'
+alias p_man_dev_bgs='_p_manifest_named game-hub__bgs_lambdas; p_kill_shell; ssay "Manifest moved to dev only bgs, no game hub development."; p_kill_jscd;'
 alias p_man_dev_gh_and_bgs='_p_manifest_named game-hub__dev_with_bgs; p_kill_shell; ssay "Manifest moved to dev both game hub and bgs. Good luck, sir"'
 alias p_man_gh='p_man_dev'
 alias p_man_qa='_p_manifest_named game-hub__device-branch; p_kill_shell; ssay "Manifest moved to on-board branch, sir."'

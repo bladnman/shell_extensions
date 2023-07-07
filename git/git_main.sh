@@ -122,6 +122,11 @@ _git_push_all() {
   git push
   echo_green "✅ Everything pushed."
 }
+_git_save_and_push() {
+  local message="${1:=WIP}"
+  _git_save_all $message
+  _git_push_all
+}
 _git_save_all() {
   echo
   # bail - not a git repo
@@ -135,6 +140,7 @@ _git_save_all() {
     local message="${1:=WIP}"
     git add -A
     git commit -m "$message"
+    echo "Note: You can use gsend to 'save and send' if you want to push as well."
     echo_green "✅ Everything saved."
   else
     echo_green "✅ All good. Nothing new to save."

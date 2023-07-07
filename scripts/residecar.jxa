@@ -1,0 +1,22 @@
+#!/usr/bin/env osascript -l JavaScript
+
+const App = Application.currentApplication();
+App.includeStandardAdditions = true;
+
+const BINARY = '/usr/libexec/avconferenced';
+
+function run(_) {
+  const avconferenced = App.doShellScript(
+    `ps -A | grep '${BINARY}' | awk '{print $1,$4}'`,
+  )
+    .split('\r')
+    .map((process) => process.split(' '))
+    .find(([_, exec]) => exec == BINARY);
+
+
+  if (!avconferenced) {
+    return;
+  }
+
+//  App.doShellScript(`kill -9 ${avconferenced[0]}`);
+}

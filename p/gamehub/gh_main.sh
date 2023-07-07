@@ -52,7 +52,7 @@ alias gh_man_branch='_gh__switch_manifest game-hub__device-branch "Now using on 
 alias gh_man_dev='_gh__switch_manifest "game-hub__dev" "Dev manifest enabled, sir"'
 alias gh_man_dev_no_debug='_gh__switch_manifest "game-hub__dev_no_remote_debug" "Dev no debug manifest enabled, bro"'
 alias gh_man_clear='_gh__switch_manifest game-hub__clear "Clear manifest installed, sir"'
-alias gh_man_bgs='_gh__switch_manifest bgs "BGS manifest installed, sir"'
+alias gh_man_bgs='_gh__switch_manifest game-hub__bgs_lambdas "BGS manifest installed, sir"'
 
 alias gh_grim='cd ~/code/p/grimoire-browser; yarn start'
 alias gh_find_used_errors='grep -r "SCE_RNPS_GAME_HUB_ERROR_" $CODE_FOLDER_GH/src --exclude=*rnps_app_game_hub_error.json | grep -o SCE_RNPS_GAME_HUB_ERROR_[^.,\;\ ]* | sort | uniq -c'
@@ -88,8 +88,12 @@ alias mnd='gh_man_dev'
 alias mnc='gh_man_clear'
 alias grim='gh_grim'
 alias kl='ghkl'
-alias stage_quick='cd $CODE_FOLDER_ROOT_GH;npm run ci:build-dev; p_cli upload --host-path=./bundles --target-path=/data/rnps/game-hub/ --is-directory;ppk'
+alias stage_quick='_gh__bundle_and_stage'
+alias gh_bundle='_gh__bundle'
+alias gh_stage='_gh__stage'
+alias gh_bundle_stage='gh_bundle; gh_stage'
 
+#alias stage_quick='cd $CODE_FOLDER_ROOT_GH;npm run ci:build-dev; p_cli upload --host-path=./bundles --target-path=/data/rnps/game-hub/ --is-directory;ppk'
 # GAME HUB LINK HELPERS
 alias ghl_spiderman='ghl UP8850-PPSL03749_00-PSGD000000000000    # SPIDERMAN'
 alias ghl_sm='ghl UP8850-PPSL03749_00-PSGD000000000000    # SPIDERMAN'
@@ -191,6 +195,20 @@ _gh__qa_run_test_suite_named() {
   cd $TEST_E2E_FOLDER
 
   pytest --udid=$CONSOLE_IP --suite=$SUITE_NAME --qtest-enable .
+}
+_gh__bundle() {
+  # move to the repo main folder
+  cd $CODE_FOLDER_ROOT_GH || exit
+  # build (bundle)
+  npm run ci:build-dev
+}
+_gh__stage() {
+  # move to the repo main folder
+  cd $CODE_FOLDER_ROOT_GH || exit
+  # upload
+  p_cli upload --host-path=./bundles --target-path=/data/rnps/gamehub-stage/ --is-directory
+  # set stage manifest (which restarts ShellUi)
+  _p_manifest_named game-hub__stage-sherlock
 }
 _gh__qa_stage() {
   ALL_ARGS=$@
