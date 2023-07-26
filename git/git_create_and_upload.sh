@@ -45,18 +45,12 @@ if [ -z "$_git_folder" ]; then
   git commit -m "initial commit"
 fi
 
-# trying to push new repo to GH... no luck yet
-# Curl some json to the github API oh damn we so fancy
-# echo curl -u ${USER:-${GITHUBUSER}} https://api.github.com/user/repos -d "{\"name\": \"${REPONAME:-${CURRENTDIR}}\", \"description\": \"${DESCRIPTION}\", \"private\": false, \"has_issues\": true, \"has_downloads\": true, \"has_wiki\": false}"
-# curl -u ${USER:-${GITHUBUSER}} https://api.github.com/user/repos -d "{\"name\": \"${REPONAME:-${CURRENTDIR}}\", \"description\": \"${DESCRIPTION}\", \"private\": false, \"has_issues\": true, \"has_downloads\": true, \"has_wiki\": false}"
-
 echo_blue "... pushing to github.com"
-git remote add origin "https://github.com/${USER:-${GITHUBUSER}}/${REPONAME:-${CURRENTDIR}}.git"
-git push -u origin main
-# git remote add origin https://github.com/${USER:-${GITHUBUSER}}/${REPONAME:-${CURRENTDIR}}.git
-# git push -u origin
 
-# Set the freshly created repo to the origin and push
-# You'll need to have added your public key to your github account
-# git remote set-url origin git@github.com:${USER:-${GITHUBUSER}}/${REPONAME:-${CURRENTDIR}}.git
-# git push --set-upstream origin master
+# when there were passwords...
+#git remote add origin "https://github.com/${USER:-${GITHUBUSER}}/${REPONAME:-${CURRENTDIR}}.git"
+
+# now there is ssh only
+git remote add origin "git@github.com:${USER:-${GITHUBUSER}}/${REPONAME:-${CURRENTDIR}}.git"
+
+git push -u origin main
