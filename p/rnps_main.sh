@@ -45,6 +45,8 @@ alias p_con_jsconsole="_p_con_jsconsole "
 alias p_con_m@="_p_con_jsconsole 🐽 M@ "
 alias filter_logs="python ~/code/python/console_log_filter/filter_logs.py"
 
+alias cdsherlock="cd $CODE_FOLDER_P/sherlock"
+
 alias p_man='p_get_manifest'
 alias p_man_dev='_p_manifest_named game-hub__dev; p_kill_shell; ssay "Manifest moved to dev, sir."'
 alias p_man_dev_no_remote_debug='_p_manifest_named game-hub__dev_no_remote_debug; p_kill_shell; ssay "Manifest moved to dev no debug, my man."'
@@ -154,7 +156,7 @@ _p_resize_snaps_by_50() {
 _p_screenshot() {
   SS_NAME=$(date -u +'%Y-%m-%d_%H%M%S')
   SS_PATH=~/Documents/graphics/screenshots/p/$SS_NAME.png
-  IMG_EDITOR="/Applications/Snagit 2022.app/Contents/MacOS/Snagit 2022"
+  IMG_EDITOR="/Applications/Snagit 2023.app/Contents/MacOS/Snagit 2023"
   # IMG_EDITOR="/Applications/Setapp/CleanShot X.app/Contents/MacOS/CleanShot X Setapp"
 
   echo "starting snapshot process:"

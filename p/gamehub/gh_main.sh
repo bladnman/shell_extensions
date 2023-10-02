@@ -49,6 +49,7 @@ alias gh_stage_master='_gh__do_stage_master'
 
 alias gh_man_master='_gh__switch_manifest game-hub__device-mast "Now using on board master manifest, sir"'
 alias gh_man_branch='_gh__switch_manifest game-hub__device-branch "Now using on board branch manifest, sir"'
+alias gh_man_stage='_gh__switch_manifest game-hub__stage-sherlock "Now using staged game hub, my old friend"'
 alias gh_man_dev='_gh__switch_manifest "game-hub__dev" "Dev manifest enabled, sir"'
 alias gh_man_dev_no_debug='_gh__switch_manifest "game-hub__dev_no_remote_debug" "Dev no debug manifest enabled, bro"'
 alias gh_man_clear='_gh__switch_manifest game-hub__clear "Clear manifest installed, sir"'
@@ -82,6 +83,7 @@ alias man_branch='p_disco; gh_man_branch; ssay "Ready sir"'
 alias man_dev='p_disco; gh_man_dev; ssay "Ready sir"'
 alias man_dev_no_debug='p_disco; gh_man_dev_no_debug; ssay "Ready sir"'
 alias man_clear='p_disco; gh_man_clear; ssay "Ready sir"'
+alias man_stage='p_disco; gh_man_stage; ssay "Ready sir"'
 alias mnm='gh_man_master'
 alias mnb='gh_man_branch'
 alias mnd='gh_man_dev'
@@ -106,7 +108,6 @@ alias ghl_rage='ghl 10004247     # RAGE'
 alias ghl_fifa='ghl 10009452      # FIFA'
 alias ghl_doom='ghl 10011489      # DOOM'
 alias ghl_ps3='ghl IV0002-SYSP00001_00-GAMEHUBPS3STREAM      # PS3 Product'
-
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS

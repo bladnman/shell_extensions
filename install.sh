@@ -51,7 +51,7 @@ source $SHELL_EXT_FOLDER/python/python.sh
 . $SHELL_EXT_FOLDER/p/gamehub/gh_main.sh
 . $SHELL_EXT_FOLDER/p/bgs/bgs_main.sh
 
-. $SHELL_EXT_FOLDER/wallpaper/wallpaper.sh
+# . $SHELL_EXT_FOLDER/wallpaper/wallpaper.sh
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  SHELL SCRIPTS
@@ -62,3 +62,5 @@ source $SHELL_EXT_FOLDER/python/python.sh
 # -=  BE HAPPY
 # -=-=-=-=-=-=-=-=-=-=-=-=
 . $SHELL_EXT_FOLDER/hello.sh
+
+alias source_shell_extensions='source $SHELL_EXT_FOLDER/install.sh'
