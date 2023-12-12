@@ -20,6 +20,7 @@ CODE_FOLDER_ROOT_GH=~/code/p/rnps-game-hub
 CODE_FOLDER_GH=$CODE_FOLDER_ROOT_GH/packages/game-hub
 TEST_E2E_FOLDER=$CODE_FOLDER_ROOT_GH/tests/e2e
 SKYNETE_CHECKOUT_FOLDER=~/code/p
+CODE_FOLDER_GH_TOOLS=~/code/python/gamehub-tools
 
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  ALIASES
@@ -59,6 +60,7 @@ alias gh_grim='cd ~/code/p/grimoire-browser; yarn start'
 alias gh_find_used_errors='grep -r "SCE_RNPS_GAME_HUB_ERROR_" $CODE_FOLDER_GH/src --exclude=*rnps_app_game_hub_error.json | grep -o SCE_RNPS_GAME_HUB_ERROR_[^.,\;\ ]* | sort | uniq -c'
 
 alias gh_mem="p_cli execute shellui 'rnps_jsmemstats \"rnps-game-hub (NPXS40033)\"' | grep HeapSize"
+alias gh_mem_watch='while true; do echo "$(date):"; gh_mem; sleep 30; done'
 alias ghmem=gh_mem
 alias gh_rnps="_gh__rnps_version"
 
@@ -108,7 +110,7 @@ alias ghl_rage='ghl 10004247     # RAGE'
 alias ghl_fifa='ghl 10009452      # FIFA'
 alias ghl_doom='ghl 10011489      # DOOM'
 alias ghl_ps3='ghl IV0002-SYSP00001_00-GAMEHUBPS3STREAM      # PS3 Product'
-
+alias gh_stage='cd $CODE_FOLDER_GH_TOOLS; pipenv run stage'
 # -=-=-=-=-=-=-=-=-=-=-=-=
 # -=  FUNCTIONS
 # -=-=-=-=-=-=-=-=-=-=-=-=
@@ -179,7 +181,6 @@ _gh__switch_manifest() {
   _p_manifest_named $MANIFEST_NAME
   RESULT=$?
   if [ $RESULT -eq 0 ]; then
-    p_kill_shell
     if [ -z "$SUCCESS_MESSAGE" ]; then
       ssay "Sir, your manifest was switched."
     else
@@ -231,16 +232,16 @@ _gh__link_concept_gamehub() {
     ISPREV='&previewMode=true'
   fi
   CMD="openuri psgamehub:main?$TYPE$ID$ISPREV"
-  echo p_cli execute shellui $CMD
+  echo p_cli execute shellui \"$CMD\"
   # p_cli execute shellui $CMD
 }
 _gh__link_product_gamehub() {
-  echo p_cli execute shellui "openuri psgamehub:main?productId=$@"
+  echo "p_cli execute shellui \"openuri psgamehub:main?productId=$@\""
   p_cli execute shellui "openuri psgamehub:main?productId=$@"
 }
 _gh__link_title_gamehub() {
   echo p_cli execute shellui "openuri psgamehub:main?titleId=$@"
-  p_cli execute shellui "openuri psgamehub:main?titleId=$@"
+  p_cli execute shellui \"openuri psgamehub:main?titleId=$@\"
 }
 _gh__run_e2e_tc() {
   local tcnum=$1
@@ -292,10 +293,10 @@ _gh__link_any_gamehub() {
 
   # add PREVIEW
   if [[ $ISPREV == 'TRUE' ]]; then
-    echo p_cli execute shellui "openuri pshome:gamehub?$TYPE=$ID&previewMode=true"
+    echo "p_cli execute shellui \"openuri pshome:gamehub?$TYPE=$ID&previewMode=true\""
     p_cli execute shellui "openuri pshome:gamehub?$TYPE=$ID&previewMode=true"
   else
-    echo p_cli execute shellui "openuri pshome:gamehub?$TYPE=$ID"
+    echo "p_cli execute shellui \"openuri pshome:gamehub?$TYPE=$ID\""
     p_cli execute shellui "openuri pshome:gamehub?$TYPE=$ID"
   fi
 }

@@ -26,8 +26,9 @@ export CONSOLE_IP='10.58.202.6'
 # export CONSOLE_IP='10.58.28.78' # mantej - temporary
 
 export MACHINE_NAME='bladn2022'
-CODE_FOLDER_P=~/code/p
-SAMPLE_FOLDER=~$CODE_FOLDER_P/z_testapps
+CODE_FOLDER=~/code
+CODE_FOLDER_P=$CODE_FOLDER/p
+SAMPLE_FOLDER=$CODE_FOLDER_P/z_testapps
 SAMPLE_APP_FOLDER=$SAMPLE_FOLDER/z_ppr_starter
 MANIFEST_FOLDER=~/code/p/ppr-urlconfig-dev
 PCLI_COMMAND=prospero-cli
@@ -46,23 +47,27 @@ alias p_con_m@="_p_con_jsconsole 🐽 M@ "
 alias filter_logs="python ~/code/python/console_log_filter/filter_logs.py"
 
 alias cdsherlock="cd $CODE_FOLDER_P/sherlock"
-
-alias p_man='p_get_manifest'
-alias p_man_dev='_p_manifest_named game-hub__dev; p_kill_shell; ssay "Manifest moved to dev, sir."'
-alias p_man_dev_no_remote_debug='_p_manifest_named game-hub__dev_no_remote_debug; p_kill_shell; ssay "Manifest moved to dev no debug, my man."'
-alias p_man_dev_bgs='_p_manifest_named game-hub__bgs_lambdas; p_kill_shell; ssay "Manifest moved to dev only bgs, no game hub development."; p_kill_jscd;'
-alias p_man_dev_gh_and_bgs='_p_manifest_named game-hub__dev_with_bgs; p_kill_shell; ssay "Manifest moved to dev both game hub and bgs. Good luck, sir"'
+# alias p_man='p_get_manifest'
+alias p_man='p_get_manifest_contents'
+alias p_man_show='p_get_manifest_contents'
+alias p_man_dev='_p_manifest_named game-hub__dev; ssay "Manifest moved to dev, sir."'
+alias p_man_dev_no_remote_debug='_p_manifest_named game-hub__dev_no_remote_debug; ssay "Manifest moved to dev no debug, my man."'
+alias p_man_dev_bgs='_p_manifest_named game-hub__bgs_lambdas; ssay "Manifest moved to dev only bgs, no game hub development."; p_kill_jscd;'
+alias p_man_dev_gh_and_bgs='_p_manifest_named game-hub__dev_with_bgs; ssay "Manifest moved to dev both game hub and bgs. Good luck, sir"'
 alias p_man_gh='p_man_dev'
-alias p_man_qa='_p_manifest_named game-hub__device-branch; p_kill_shell; ssay "Manifest moved to on-board branch, sir."'
-alias p_man_qa_auto='_p_manifest_named game-hub-qa-automation; p_kill_shell; ssay "Manifest moved to qa automation, sir."'
-alias p_man_mast='_p_manifest_named game-hub__device-mast; p_kill_shell; ssay "Manifest moved to on-board master, sir."'
-alias p_man_clear='_p_manifest_named game-hub__clear; p_kill_shell; ssay "Now running with a clear manifest, sir."'
+alias p_man_qa='_p_manifest_named game-hub__device-branch; ssay "Manifest moved to on-board branch, sir."'
+alias p_man_qa_auto='_p_manifest_named game-hub-qa-automation; ssay "Manifest moved to qa automation, sir."'
+alias p_man_mast='_p_manifest_named game-hub__device-mast; ssay "Manifest moved to on-board master, sir."'
+alias p_man_clear='_p_manifest_named game-hub__clear; ssay "Now running with a clear manifest, sir."'
+alias p_man_empty='_p_manifest_named game-hub__empty; ssay "No override manifest at all, buddy."'
+alias man_empty='p_man_empty'
 alias p_man_thb='_p_manifest_url "https://urlconfig.api.playstation.com/rnps/2.01.00.00/manifest"; p_kill_shell; ssay "Now running with a take-home beta manifest, sir."'
 alias p_man_mem='_p_manifest_url "https://urlconfig.e1-np.api.playstation.com/rnps/u/lightning/urlconfig.json"; p_kill_shell; ssay "Now running with a memory profile manifest, sir."'
 alias p_man_url='_p_manifest_url'
 
 alias p_man_named='_p_manifest_named'
 alias p_create_sample='_p_create_sample'
+
 alias p_serve_manifest='cd $MANIFEST_FOLDER;yarn start'
 alias p_kill_shell='echo_blue "Killing Shell"; p_kill_jscd; _p_cli kill SceShellUI'
 alias p_kill_jscd='echo_blue "Killing Shell"; _p_cli kill SceJSCd'
@@ -81,6 +86,7 @@ alias p_poweron='_p_cli poweron'
 alias p_upload='_p_upload'
 alias cd_p='cd $CODE_FOLDER_P'
 alias p_ss='_p_screenshot'
+alias p_qa='_p_qa_expiration_date'
 
 alias p_screen='_p_screenshot'
 alias p_snap='_p_screenshot'
@@ -98,6 +104,7 @@ alias p_dl_bgs='_p_dl_bgs'
 alias dl_bgs='_p_dl_bgs'
 alias p_dl_appdb='_p_dl_appdb'
 alias dl_appdb='_p_dl_appdb'
+alias fireflies='cd $CODE_FOLDER/electron/fireflies; ys'
 
 # SETTINGS
 alias p_set_voice_on='_p_setting_set "/Accessibility/Screen Reader/Enable Screen Reader" 1'
@@ -109,8 +116,8 @@ alias p_font_size_extra_large='_p_font_size 2'
 alias p_font_bold_toggle='_p_font_bold'
 alias p_font_bold_on='_p_font_bold 1'
 alias p_font_bold_off='_p_font_bold 0'
-alias p_online='_p_setting_set "/Network/Internet Connection" 1'
-alias p_offline='_p_setting_set "/Network/Internet Connection" 0'
+alias p_online='_p_setting_set "/network/connect to the internet" 1'
+alias p_offline='_p_setting_set "/network/connect to the internet" 0'
 alias p_env_e1='_p_set_env e1-np'
 alias p_env_np='_p_set_env np'
 alias p_env_prod='_p_set_env np'
@@ -156,7 +163,7 @@ _p_resize_snaps_by_50() {
 _p_screenshot() {
   SS_NAME=$(date -u +'%Y-%m-%d_%H%M%S')
   SS_PATH=~/Documents/graphics/screenshots/p/$SS_NAME.png
-  IMG_EDITOR="/Applications/Snagit 2023.app/Contents/MacOS/Snagit 2023"
+  IMG_EDITOR="/Applications/Snagit 2024.app/Contents/MacOS/Snagit 2024"
   # IMG_EDITOR="/Applications/Setapp/CleanShot X.app/Contents/MacOS/CleanShot X Setapp"
 
   echo "starting snapshot process:"
@@ -228,11 +235,14 @@ _p_manifest_contents_formatted() {
   echo "asking for manifest url..."
   FULL_MAN_URL=$(_p_cli get manifest-url | sed -e "s/.*= //g")
   MAN_URL=$(echo $FULL_MAN_URL | sed -e "s/mhttp/http/")
-  curl $MAN_URL | jq
+  # -s prevents the status from showing
+  curl -s $MAN_URL | jq
 
   echo
-  echo "From"
-  echo_yellow $FULL_MAN_URL
+  # echo "From"
+  # echo $FULL_MAN_URL
+  echo "Edit:"
+  echo "📝 ${FULL_MAN_URL:1}/edit"
 }
 _p_user_formatted() {
   # this is sweet shell magic
@@ -244,11 +254,25 @@ _p_extended_info_formatted() {
 
   _p_cli get extended | sed -e "s/Devi.* is {/{/" | sed -e "s/^.*{/{/" | sed -e "s/}.*$/}/" | sed -e "s/'/\"/g" | jq
 }
+_p_get_qa_flag_remaining_sec() {
+  _p_extended_info_formatted | grep "QafExpiryTime" | awk -F': ' '{print $2}' | awk -F',' '{print $1}'
+}
+_p_qa_expiration_date() {
+  local REMAINING_SEC=$(_p_get_qa_flag_remaining_sec)
+  local NOW=$(date +%s)
+  local EXPIRATION_DATE=$(date -r $(expr $NOW + $REMAINING_SEC) '+%A, %d %B %Y %H:%M:%S %Z')
+
+  # Calculate the number of days remaining
+  local DAYS_REMAINING=$(expr $REMAINING_SEC / 86400) # 86400 seconds in a day
+
+  echo "EXP DATE:     $EXPIRATION_DATE"
+  echo "DAYS LEFT:    $DAYS_REMAINING"
+}
 _p_manifest_url() {
   prospero-cli $CONSOLE_IP set manifest-url $1
 }
 _p_manifest_named() {
-  prospero-cli $CONSOLE_IP set manifest-url mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/$1
+  _p_set_manifest_to_named $1
 }
 _p_upload() {
   _p_cli upload --host-path $1 --target-path $2
@@ -483,4 +507,35 @@ _p_get_user_id() {
   # echo_blue "user_info_json: $user_info_json"
   userid=$(echo ${user_info_json} | jq --raw-output '.UserID')
   echo $userid
+}
+_p_switch_manifest() {
+  MANIFEST_NAME=$1
+  SUCCESS_MESSAGE=$2
+
+  _p_manifest_named $MANIFEST_NAME
+  RESULT=$?
+  if [ $RESULT -eq 0 ]; then
+    p_kill_shell
+    if [ -z "$SUCCESS_MESSAGE" ]; then
+      ssay "Sir, your manifest was switched."
+    else
+      ssay $SUCCESS_MESSAGE
+    fi
+  else
+    snotif
+  fi
+}
+_p_set_manifest_to_named() {
+  _p_set_manifest_to_murl "mhttps://urlconfig.rancher.sie.sony.com/u/mmaher/$1"
+}
+_p_set_manifest_to_murl() {
+  MANIFEST_MURL=$1
+  CURRENT_MAN_URL=$(_p_cli get manifest-url | sed -e "s/.*= //g")
+  if [ "$MANIFEST_MURL" = "$CURRENT_MAN_URL" ]; then
+    echo "Manifest is already set to $MANIFEST_MURL"
+    return 0
+  else
+    _p_cli set manifest-url $MANIFEST_MURL
+    p_kill_shell
+  fi
 }

@@ -48,8 +48,10 @@ source $SHELL_EXT_FOLDER/python/python.sh
 # - P
 # - - - -
 . $SHELL_EXT_FOLDER/p/rnps_main.sh
+. $SHELL_EXT_FOLDER/p/rnps_control.sh
 . $SHELL_EXT_FOLDER/p/gamehub/gh_main.sh
 . $SHELL_EXT_FOLDER/p/bgs/bgs_main.sh
+. $SHELL_EXT_FOLDER/p/rnps_settings/rnps_settings_main.sh
 
 # . $SHELL_EXT_FOLDER/wallpaper/wallpaper.sh
 
